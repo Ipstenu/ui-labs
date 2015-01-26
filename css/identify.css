@@ -1,0 +1,21 @@
+/*------------------------------------------------------------------------------
+  3.0 - Identify Server Type
+------------------------------------------------------------------------------*/
+
+/*WordPress 3.3 and later*/
+body.uilabs-development,
+body.uilabs-staging,
+body.uilabs-live {
+	padding-top: 5px;
+}
+
+body.uilabs-development #wpadminbar {border-top: #a2ed39 5px solid;}
+body.uilabs-staging #wpadminbar 	{border-top: #ffc825 5px solid;}
+body.uilabs-live #wpadminbar 		{border-top: #ff2626 5px solid;}
+
+/*WordPress 3.2*/
+body.branch-3-2 {padding-top: 0!important;}
+body.branch-3-2 #wpadminbar {border-top:none!important;}
+body.uilabs-development.branch-3-2 	{border-top: #a2ed39 5px solid;}
+body.uilabs-staging.branch-3-2 		{border-top: #ffc825 5px solid;}
+body.uilabs-live.branch-3-2 		{border-top: #ff2626 5px solid;}

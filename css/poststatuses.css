@@ -1,0 +1,89 @@
+/*------------------------------------------------------------------------------
+  1.0 - Post Statuses
+------------------------------------------------------------------------------*/
+
+/* Pending */
+.post-state .pending {
+	position:relative;
+	top:-1px;
+	padding:2px 5px;
+	color:#000;
+	font-weight:bold;
+	font-size: 90%;
+	text-shadow:rgba(255,255,255,0.6) 0 1px 0;
+	background: #EFCB3B;
+	border-radius:4px;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	border: 1px solid #DBA811;
+}
+
+/* Draft */
+.post-state .draft {
+	position:relative;
+	top:-1px;
+	padding:2px 5px;
+	color:#fff;
+	font-size: 90%;
+	font-weight:bold;
+	text-shadow:rgba(0,0,0,0.7) 0 -1px 0;
+	background: #c10c05;
+	border-radius:4px;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	border: 1px solid #870804;
+}
+
+/* Sticky */
+.post-state .sticky {
+	position:relative;
+	top:-1px;
+	padding:2px 5px;
+	color:#fff;
+	font-size: 90%;
+	font-weight:bold;
+	text-shadow:rgba(0,0,0,0.7) 0 -1px 0;
+	background: #3db0eb;
+	border-radius:4px;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	border: 1px solid #277fac;
+}
+
+/* Private */
+.post-state .private {
+	position:relative;
+	top:-1px;
+	padding:2px 5px;
+	color:#000;
+	font-size: 90%;
+	font-weight:bold;
+	text-shadow:rgba(255,255,255,1) 0 1px 0;
+	background:#fff;
+	border-radius:4px;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	border: 1px solid #ddd;
+}
+
+/* Password Protected */
+.post-state .password-protected {
+	position:relative;
+	top:-1px;
+	padding:2px 5px;
+	color:#fff;
+	font-weight:bold;
+	text-shadow:rgba(0,0,0,1) 0 -1px 0;
+	background:#333;
+	border-radius:4px;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	border: 1px solid #222;
+}
+
+/* Remove invisibility cloak for non-linked
+post titles. (non-admin users) */
+.author-other strong,
+.alternate.author-other strong {
+	color:#555;
+}

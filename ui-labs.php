@@ -5,7 +5,9 @@ Plugin URI:
 Description: Experimental WordPress admin UI features, ooo shiny!
 Author: John O'Nolan, Mika A Epstein
 Version: 2.0-Beta
-Author URI: http://john.onolan.org
+Author URI: http://halfelf.org
+License: GPL-2.0+
+License URI: http://www.opensource.org/licenses/gpl-license.php
 */
 
 /**

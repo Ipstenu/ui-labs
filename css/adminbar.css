@@ -2,16 +2,6 @@
   2.0 - New Admin Header
 ------------------------------------------------------------------------------*/
 
-#adminmenu .wp-menu-arrow {
-	background:none!important;
-}
-#adminmenu .wp-menu-arrow div {
-	background:url(images/menu-arrow-frame.png) top right no-repeat;
-}
-#adminmenu li:nth-child(2).wp-menu-separator {
-	display:none;
-}
-
 #wpcontent, #footer {
 	margin-left:146px;
 }
@@ -25,34 +15,22 @@
 .wp-admin.index-php #dashboard-widgets .meta-box-sortables {margin-right:0;}
 
 #wpbody-content {padding-bottom:30px;}
-#wpbody-content .wrap {padding:15px 18px;}
+#wpbody-content .wrap {padding:15px 20px 0 2px;}
 #wpbody-content .wrap h2 {margin-bottom:5px;}
 
 /*header*/
-#wphead {
-	height:29px;
-	border-bottom:#dfdfdf 1px solid;
-	margin-right:0;
-	margin-left:0;
+#wpadminbar {
 	padding-left:33px;
 	padding-right:30px;
-	text-shadow:#fff 0 1px 0;
-	background:#f1f1f1;
-	background:-webkit-gradient(linear,left top,left bottom,from(#F9F9F9),to(#ECECEC));
-	background:-ms-linear-gradient(top,#F9F9F9,#ECECEC);
-	background:-moz-linear-gradient(top,#F9F9F9,#ECECEC);
-	background:linear-gradient(top,#F9F9F9,#ECECEC);
-	box-shadow:0 1px 0 #fff inset;
-	-webkit-box-shadow:0 1px 0 #fff inset;
-	-moz-box-shadow:0 1px 0 #fff inset;
+	text-shadow:#fff 0 1px 0!important;
 }
 
-#wphead h1 {font-size:14px;line-height:18px;}
-
-#screen-meta {margin-right:14px;}
+#wp-toolbar {
+    width: 95% !important;
+}
 
 /*footer*/
-#footer {
+#wpfooter {
 	height:14px;
 	padding-top:5px;
 	padding-left:37px;
@@ -60,14 +38,7 @@
 	margin-right:0;
 	border-bottom:#dfdfdf 1px solid;
 	text-shadow:#fff 0 1px 0;
-	background:#f1f1f1;
-	background:-webkit-gradient(linear,left top,left bottom,from(#F9F9F9),to(#ECECEC));
-	background:-ms-linear-gradient(top,#F9F9F9,#ECECEC);
-	background:-moz-linear-gradient(top,#F9F9F9,#ECECEC);
-	background:linear-gradient(top,#F9F9F9,#ECECEC);
-	box-shadow:0 1px 0 #fff inset;
-	-webkit-box-shadow:0 1px 0 #fff inset;
-	-moz-box-shadow:0 1px 0 #fff inset;
+	background:#ddd;
 }
 
 /*collapsed menu styles*/

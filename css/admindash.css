@@ -1,0 +1,51 @@
+/*------------------------------------------------------------------------------
+  4.0 - Admin Dashboard
+------------------------------------------------------------------------------*/
+
+/* HTML Editor */
+#content #editor, #editorcontainer #content, #editorcontainer textarea#content, #editorcontainer textarea, div#postdivrich.postarea #editorcontainer textarea#content { font: normal 12px/1.5 Monaco, monospace !important; }
+
+body#tinymce, body.wp-editor { font-size: 16px!important;}
+
+
+/* Scheduled Posts */
+.status-future .column-date abbr {
+	font-weight: bold;
+}
+
+/* Sidebar */
+
+#adminmenu a.menu-top, #adminmenu .wp-submenu-head {
+    font-size: 15px!important;
+}
+
+#adminmenu .wp-submenu a {
+	font-size: 14px!important;
+}
+
+/* Admin Bar */
+#wpadminbar a.ab-item, #wpadminbar > #wp-toolbar span.ab-label {
+	font: 15px/32px "Open Sans",sans-serif!important;
+}
+
+/* Dashboard */
+body, .postbox .inside,
+.stuffbox .inside,
+#the-comment-list .comment-item h4,
+p, .wp_attachment_details label[for="content"],
+#dash-right-now .sub p,
+.widefat td p {
+	font-size: 14px!important;
+}
+
+#dash-right-now .sub {
+    color: #666;
+}
+
+#future-posts ul span, #published-posts ul span {
+    color: #999;
+}
+
+#dashboard-widgets .postbox .inside {
+margin-bottom: 0px;
+}

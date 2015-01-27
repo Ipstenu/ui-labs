@@ -8,6 +8,7 @@ Version: 2.0-Beta
 Author URI: http://halfelf.org
 License: GPL-2.0+
 License URI: http://www.opensource.org/licenses/gpl-license.php
+
 */
 
 /**
@@ -29,6 +30,7 @@ class UI_Labs {
     var $options = array();
     var $poststatuses = 'yes';
     var $adminbar = 'yes';
+    var $admindash = 'no';
     var $identify = 'no';
     var $servertype = 'no';
     
@@ -94,13 +96,13 @@ class UI_Labs {
 			wp_register_style('ui-labs-adminbar', plugins_url('css/adminbar.css', __FILE__), false, '9001');
 			wp_enqueue_style('ui-labs-adminbar');
 		}
+		if( $this->options['admindash'] == 'yes') {
+			wp_register_style('ui-labs-admindash', plugins_url('css/admindash.css', __FILE__), false, '9001');
+			wp_enqueue_style('ui-labs-admindash');
+		}
 		if( $this->options['identify'] == 'yes') {
 			wp_register_style('ui-labs-identify', plugins_url('css/identify.css', __FILE__), false, '9001');
 			wp_enqueue_style('ui-labs-identify');
-		}
-		if( $this->options['servertype'] == 'yes') {
-			wp_register_style('ui-labs-servertype', plugins_url('css/servertype.css', __FILE__), false, '9001');
-			wp_enqueue_style('ui-labs-servertype');
 		}
 		
 		// Filter for the admin body class
@@ -156,7 +158,8 @@ class UI_Labs {
 
 		// The Fields
 		add_settings_field( 'poststatuses', 'Colour-Coded Post Statuses', array( &$this, 'poststatuses_callback'), 'ui-labs-settings', 'ui-lab-experiments' );
-		add_settings_field( 'adminbar', 'Classic WordPress Admin Bar', array( &$this, 'adminbar_callback'), 'ui-labs-settings', 'ui-lab-experiments' );
+		add_settings_field( 'adminbar', 'WordPress Toolbar', array( &$this, 'adminbar_callback'), 'ui-labs-settings', 'ui-lab-experiments' );
+		add_settings_field( 'admindash', 'Admin Dashboard', array( &$this, 'admindash_callback'), 'ui-labs-settings', 'ui-lab-experiments' );
 		add_settings_field( 'identify', 'Identify This Server', array( &$this, 'identify_callback'), 'ui-labs-settings', 'ui-lab-experiments' );
 		add_settings_field( 'servertype', 'Server Type', array( &$this, 'servertype_callback'), 'ui-labs-settings', 'ui-lab-experiments' );
 	}
@@ -180,19 +183,31 @@ class UI_Labs {
 	function poststatuses_callback() {
 		?>
 		<input type="checkbox" id="uilabs_options[poststatuses]" name="uilabs_options[poststatuses]" value="yes" <?php echo checked( yes, $this->options['poststatuses'], false ); ?> >
-		<label for="uilabs_options[poststatuses]"><?php _e('EXPLAIN', 'ui-labs'); ?></label>
+		<label for="uilabs_options[poststatuses]"><?php _e('Add color coded labels to posts to easily identify which needs addressing.', 'ui-labs'); ?></label>
 		<?php
 	}
 
 	/**
-	 * Classic WordPress Admin Bar
+	 * Clean up the Toolbar
 	 *
 	 * @since 2.0
 	 */
 	function adminbar_callback() {
 		?>
 		<input type="checkbox" id="uilabs_options[adminbar]" name="uilabs_options[adminbar]" value="yes" <?php echo checked( yes, $this->options['adminbar'], false ); ?> >
-		<label for="uilabs_options[adminbar]"><?php _e('EXPLAIN', 'ui-labs'); ?></label>
+		<label for="uilabs_options[adminbar]"><?php _e('Adds spacing and padding to the admin bar.', 'ui-labs'); ?></label>
+	    <?php
+	}
+
+	/**
+	 * Make the fonts in the dashboard bigger
+	 *
+	 * @since 2.0
+	 */
+	function admindash_callback() {
+		?>
+		<input type="checkbox" id="uilabs_options[admindash]" name="uilabs_options[admindash]" value="yes" <?php echo checked( yes, $this->options['admindash'], false ); ?> >
+		<label for="uilabs_options[admindash]"><?php _e('Increase the fonts in the admin dashboard for old people.', 'ui-labs'); ?></label>
 	    <?php
 	}
 
@@ -204,7 +219,7 @@ class UI_Labs {
 	function identify_callback() {
 		?>
 		<input type="checkbox" id="uilabs_options[identify]" name="uilabs_options[identify]" value="yes" <?php echo checked( yes, $this->options['identify'], false ); ?> >
-		<label for="uilabs_options[identify]"><?php _e('EXPLAIN', 'ui-labs'); ?></label>
+		<label for="uilabs_options[identify]"><?php _e('Enable colour coding for your different servers for quick identification.', 'ui-labs'); ?></label>
 		<?php
 	}
 
@@ -258,6 +273,7 @@ class UI_Labs {
 
 		$activate_options['poststatuses'] = 'yes';
 	    $activate_options['adminbar'] = 'yes';
+	    $activate_options['admindash'] = 'no';
 	    $activate_options['identity'] = 'no';
 	    $activate_options['servertype'] = 'uilabs-blank';
 	    update_option( 'uilabs_options', $activate_options );

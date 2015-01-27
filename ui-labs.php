@@ -290,12 +290,14 @@ class UI_Labs {
 	 * Allows for fine-grained control of styles and targetin protected
 	 * posts, written by Pete Mall
 	 *
+	 * Modified to allow multiple languages: https://wordpress.org/support/topic/plugin-ui-labs-classes-translated
+	 *
 	 * @since 1.0.1
 	 */
 	function display_post_states( $post_states ) {
-	   foreach ( $post_states as &$post_state )
-	       $post_state = '<span class="' . strtolower( str_replace( ' ', '-', $post_state ) ) . '">' . $post_state . '</span>';
-	   return $post_states;
+	   foreach ( $post_states as $post_state => $post_state_title )
+	   		$post_state_array[] = '<span class="' . strtolower( str_replace( ' ', '-', $post_state ) ) . '">' . $post_state_title . '</span>';
+	   return $post_state_array;
 	}
 	
 	/**

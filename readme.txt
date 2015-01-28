@@ -12,7 +12,7 @@ Experimental WordPress admin UI features, shiny ones.
 
 UI Labs is a plugin that offers experimental WordPress admin UI features with the aim of building upon and enhancing the default WordPress User Interface. All features are in a constant state of beta, there are no guarantees and a modern browser is mandatory!
 
-These are unofficial core UI experiments - who knows what could happen?
+These are unofficial Core UI experiments - who knows what could happen?
 
 = Features =
 

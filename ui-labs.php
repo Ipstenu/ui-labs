@@ -46,9 +46,6 @@ class UI_Labs {
 	    //allow this instance to be called from outside the class
         self::$instance = $this;
 
-        //add init hook
-		add_action( 'init', array( &$this, 'init' ) );
-
 		//add admin init hooks
 		add_action( 'admin_init', array( &$this, 'admin_init' ) );
 
@@ -68,13 +65,12 @@ class UI_Labs {
 	}
 
 	/**
-	 * Init Callback
+	 * Admin init Callback
 	 *
 	 * @since 2.0
 	 */
+    function admin_init() {
 
-	function init() {
-		
 		// Add link to settings from plugins listing page
 		add_filter( 'plugin_action_links', array( $this, 'add_settings_link'), 10, 2 );
 		
@@ -104,14 +100,6 @@ class UI_Labs {
 		
 		// Filter for the admin body class
 		add_filter('admin_body_class', array( &$this, 'admin_body_class') );
-	}
-
-	/**
-	 * Admin init Callback
-	 *
-	 * @since 2.0
-	 */
-    function admin_init() {
 
 	    // check if DB needs to be upgraded (this will merge old settings to new)
 	    if ( false === $this->options || ! isset( $this->options['db_version'] ) || $this->options['db_version'] < $this->db_version ) {

@@ -34,8 +34,14 @@ body, .postbox .inside,
 #the-comment-list .comment-item h4,
 p, .wp_attachment_details label[for="content"],
 #dash-right-now .sub p,
-.widefat td p {
+.widefat td p,
+.widefat td,
+.wp-list-table a  {
 	font-size: 14px!important;
+}
+
+.widefat th {
+	font-weight: bold!important;
 }
 
 #dash-right-now .sub {

@@ -59,7 +59,7 @@ class UI_Labs {
 	        'dashboard' => 'no',
 	        'identity' => 'no',
 	        'servertype' => 'uilabs-blank',
-	        'db_version' => $db_version,
+	        'db_version' => $this->db_version,
 	    );
 
 	}
@@ -306,7 +306,7 @@ class UI_Labs {
 	 *
 	 * @since 1.0.1
 	 */
-	function display_post_states( $post_states ) {
+	function display_post_states( $post_states ) {		
 	   foreach ( $post_states as $post_state => $post_state_title )
 	   		$post_state_array[] = '<span class="' . strtolower( str_replace( ' ', '-', $post_state ) ) . '">' . $post_state_title . '</span>';
 	   return $post_state_array;

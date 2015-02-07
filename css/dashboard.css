@@ -36,7 +36,9 @@ p, .wp_attachment_details label[for="content"],
 #dash-right-now .sub p,
 .widefat td p,
 .widefat td,
-.wp-list-table a  {
+.wp-list-table a,
+.subsubsub,
+.wrap .add-new-h2, .wrap .add-new-h2:active {
 	font-size: 14px!important;
 }
 

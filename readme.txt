@@ -58,6 +58,7 @@ No special instructions.
 * Fixed: Proper use of plugins_url (we should never be calling our plugin folder by name).
 * Fixed: Removed post-format images since that's in core now.
 * Fixed: Experiment number 2, updated for the WP 4.0 world.
+* Updated: Screenshots
 * New: Experiment number 4, larger fonts for old people
 
 = 1.2 (2011-10-05) =

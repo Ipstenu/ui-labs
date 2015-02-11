@@ -4,7 +4,7 @@ Plugin Name: UI Labs
 Plugin URI: 
 Description: Experimental WordPress admin UI features, ooo shiny!
 Author: John O'Nolan, Mika A Epstein
-Version: 2.0-Beta
+Version: 2.1-Beta
 Author URI: http://halfelf.org
 License: GPL-2.0+
 License URI: http://www.opensource.org/licenses/gpl-license.php
@@ -307,8 +307,9 @@ class UI_Labs {
 	 * @since 1.0.1
 	 */
 	function display_post_states( $post_states ) {		
-	   foreach ( $post_states as $post_state => $post_state_title )
-	   		$post_state_array[] = '<span class="' . strtolower( str_replace( ' ', '-', $post_state ) ) . '">' . $post_state_title . '</span>';
+		$post_state_array = array();
+		foreach ( $post_states as $post_state => $post_state_title )
+			$post_state_array[] = '<span class="' . strtolower( str_replace( ' ', '-', $post_state ) ) . '">' . $post_state_title . '</span>';
 	   return $post_state_array;
 	}
 	

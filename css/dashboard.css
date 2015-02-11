@@ -7,12 +7,6 @@
 
 body#tinymce, body.wp-editor { font-size: 16px!important;}
 
-
-/* Scheduled Posts */
-.status-future .column-date abbr {
-	font-weight: bold;
-}
-
 /* Sidebar */
 
 #adminmenu a.menu-top, #adminmenu .wp-submenu-head {

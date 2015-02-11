@@ -3,7 +3,7 @@ Contributors: JohnONolan, Ipstenu
 Tags: ui, admin design, experimental
 Requires at least: 3.2
 Tested up to: 4.1
-Stable tag: 2.0
+Stable tag: 2.1-beta
 License: GPLv2 or later 
 
 Experimental WordPress admin UI features, shiny ones.
@@ -48,6 +48,11 @@ No special instructions.
 4. Experiment #4 - Larger WP-Admin fonts for old people
 
 == Changelog ==
+
+= 2.1 (2015-02-11) =
+
+* Changed: CSS trickery to show the scheduled posts with a fake button
+* Fixed: Array state of stupidity with post states
 
 = 2.0 (2015-01-26) =
 * Notice: Forked from original by John O'Nolan with the intent to merge and/or take over.

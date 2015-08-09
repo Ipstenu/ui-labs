@@ -2,9 +2,9 @@
 Contributors: JohnONolan, Ipstenu
 Tags: ui, admin design, experimental
 Requires at least: 4.0
-Tested up to: 4.2
+Tested up to: 4.3
 Stable tag: 2.1
-License: GPLv2 or later 
+License: GPLv2 or later
 
 Experimental WordPress admin UI features, shiny ones.
 

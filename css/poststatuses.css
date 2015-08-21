@@ -82,13 +82,7 @@
 }
 
 /* Scheduled Posts */
-
-tr.status-future td.column-title a.row-title::after {
-	content: " - ";
-}
-
-tr.status-future td.column-title strong::after {
-    content: "Scheduled";
+.post-state .scheduled {
 	position:relative;
 	top:-1px;
 	padding:2px 5px;

@@ -3,7 +3,7 @@ Contributors: JohnONolan, Ipstenu
 Tags: ui, admin design, experimental
 Requires at least: 4.0
 Tested up to: 4.3
-Stable tag: 2.1
+Stable tag: 2.1.1
 License: GPLv2 or later
 
 Experimental WordPress admin UI features, shiny ones.
@@ -48,6 +48,10 @@ No special instructions.
 4. Experiment #4 - Larger WP-Admin fonts for old people
 
 == Changelog ==
+
+= 2.1.1 (2015-08-21) =
+
+* Fixed: CSS with scheduled posts was off because of a change I missed in core!
 
 = 2.1 (2015-02-11) =
 

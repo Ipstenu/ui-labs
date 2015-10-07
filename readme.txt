@@ -2,8 +2,8 @@
 Contributors: JohnONolan, Ipstenu
 Tags: ui, admin design, experimental
 Requires at least: 4.0
-Tested up to: 4.3
-Stable tag: 2.1.1
+Tested up to: 4.4
+Stable tag: 2.2
 License: GPLv2 or later
 
 Experimental WordPress admin UI features, shiny ones.
@@ -12,7 +12,7 @@ Experimental WordPress admin UI features, shiny ones.
 
 UI Labs is a plugin that offers experimental WordPress admin UI features with the aim of building upon and enhancing the default WordPress User Interface. All features are in a constant state of beta, there are no guarantees and a modern browser is mandatory!
 
-These are unofficial Core UI experiments - who knows what could happen?
+These experiments are limited by their very nature and are mostly small tweaks via CSS to the display of the admin section in non-destructive ways. Some experiments are failures.
 
 = Features =
 
@@ -36,6 +36,10 @@ Sometimes, when developing sites locally, deploying them to a staging server, th
 
 Small fonts hurt. This will bump the default font sizes for those of us who need larger fonts.
 
+<strong>Old Plugin Warnings</strong>
+
+If a plugin hasn't been updated in more than 2 years, you'll see an alert on the plugin list page.
+
 == Installation ==
 
 No special instructions.
@@ -45,16 +49,18 @@ No special instructions.
 1. Experiment #1 - Colour-Coded Post Statuses
 2. Experiment #2 - Better Spacing/Padding for the Toolbar
 3. Experiment #3 - Server Identification
-4. Experiment #4 - Larger WP-Admin fonts for old people
+4. Experiment #4 - Larger WP-Admin fonts
+5. Experiment #5 - Old Plugin Warnings
 
 == Changelog ==
 
-= 2.1.1 (2015-08-21) =
+= 2.2.0 (2015-10-07) =
+* New: Experiment number 5, added warnings for plugins over 2 years old
 
+= 2.1.1 (2015-08-21) =
 * Fixed: CSS with scheduled posts was off because of a change I missed in core!
 
 = 2.1 (2015-02-11) =
-
 * Changed: CSS trickery to show the scheduled posts with a fake button
 * Fixed: Array state of stupidity with post states
 

@@ -55,7 +55,7 @@ No special instructions.
 == Changelog ==
 
 = 2.2.1 (2015-11-30) =
-* Fixed: An unexpected T_PAAMAYIM_NEKUDOTAYIM occured.
+* Fixed: An unexpected T_PAAMAYIM_NEKUDOTAYIM occurred.
 
 = 2.2.0 (2015-10-07) =
 * New: Experiment number 5, added warnings for plugins over 2 years old

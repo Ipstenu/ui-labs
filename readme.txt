@@ -3,7 +3,7 @@ Contributors: JohnONolan, Ipstenu
 Tags: ui, admin design, experimental
 Requires at least: 4.0
 Tested up to: 4.4
-Stable tag: 2.2
+Stable tag: 2.2.1
 License: GPLv2 or later
 
 Experimental WordPress admin UI features, shiny ones.
@@ -53,6 +53,9 @@ No special instructions.
 5. Experiment #5 - Old Plugin Warnings
 
 == Changelog ==
+
+= 2.2.1 (2015-11-30) =
+* Fixed: An unexpected T_PAAMAYIM_NEKUDOTAYIM occured.
 
 = 2.2.0 (2015-10-07) =
 * New: Experiment number 5, added warnings for plugins over 2 years old

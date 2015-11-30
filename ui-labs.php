@@ -123,7 +123,7 @@ class UI_Labs {
 	    }
 	    
 	    // Register Settings
-		$this::register_settings();
+		$this->register_settings();
 	}
 
 	/**

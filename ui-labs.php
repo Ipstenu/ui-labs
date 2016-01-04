@@ -4,7 +4,7 @@ Plugin Name: UI Labs
 Plugin URI: http://halfelf.org/plugins/ui-labs/
 Description: Experimental WordPress admin UI features, ooo shiny!
 Author: John O'Nolan, Mika A Epstein
-Version: 2.2.1
+Version: 2.2.2
 Author URI: http://halfelf.org
 License: GPL-2.0+
 License URI: http://www.opensource.org/licenses/gpl-license.php
@@ -341,6 +341,11 @@ class UI_Labs {
 	 */
 	function pluginage_row( $file, $plugin_data ) {
 
+		// Forcing a hard set - If there's no slug, then this plugin is screwy and should be skipped.
+		if ( !isset($plugin_data['slug']) ) {
+			return false;
+		}
+
 		$lastupdated = strtotime( $this->pluginage_get_last_updated( $plugin_data['slug'] ) ) ;
 		$twoyears    = strtotime('-2 years');
 		
@@ -374,6 +379,13 @@ class UI_Labs {
 	 * @return date|void
 	 */
 	function pluginage_get_last_updated( $slug ) {
+
+		// Bail early - If there's no slug, then this plugin is screwy and should be skipped. Still
+		// return an empty but CACHABLE response.
+		if ( !isset($slug) ) {
+			return '';
+		}
+
 		$request = wp_remote_post(
 			'http://api.wordpress.org/plugins/info/1.0/',
 			array(
@@ -388,20 +400,24 @@ class UI_Labs {
 				)
 			)
 		);
-		if ( 200 != wp_remote_retrieve_response_code( $request ) )
+		
+		if ( 200 != wp_remote_retrieve_response_code( $request ) ) {
+			// Return a false and non-cachable response since we want to try again later
 			return false;
-	
-		$response = unserialize( wp_remote_retrieve_body( $request ) );
-		// Return an empty but cachable response if the plugin isn't in the .org repo
-		if ( empty( $response ) )
+		} else {
+			$response = unserialize( wp_remote_retrieve_body( $request ) );
+		}
+		
+		if ( empty( $response ) ) {
+			// Return an empty but cachable response if the plugin isn't in the .org repo
 			return '';
-		if ( isset( $response->last_updated ) )
+		} elseif ( isset( $response->last_updated ) ) {
 			return sanitize_text_field( $response->last_updated );
-	
-		return false;
+		} else {
+			return false;
+		}
 	}
 
-	
 	/**
 	 * Identify Server UI Experiment
 	 *

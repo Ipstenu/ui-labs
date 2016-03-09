@@ -1,12 +1,14 @@
-# ui-labs
-UI Labs (Fork of John O'Nolan's Plugin)
+# UI Labs #
 
-All pull requests are welcome.
+This is the development repository for the UI Labs plugin.
 
-Current Experiments:
+## Documentation
 
-1. Experiment #1 - Colour-Coded Post Statuses
-2. Experiment #2 - Better Spacing/Padding for the Toolbar
-3. Experiment #3 - Server Identification
-4. Experiment #4 - Larger WP-Admin fonts
-5. Experiment #5 - Old Plugin Warnings
+* [WP Readme](readme.txt)
+* [Changelog](changelog.txt)
+
+## Links
+
+* [Plugin Site](http://halfelf.org/plugins/ui-labs/)
+* [Basic Support](http://wordpress.org/support/plugin/ui-labs)
+* [Donate](https://store.halfelf.org/donate/)

@@ -3,7 +3,7 @@ Contributors: JohnONolan, Ipstenu
 Tags: ui, admin design, experimental
 Requires at least: 4.0
 Tested up to: 4.5
-Stable tag: 2.2.2
+Stable tag: 2.2.3
 License: GPLv2 or later
 
 Experimental WordPress admin UI features, shiny ones.
@@ -54,6 +54,9 @@ No special instructions.
 
 == Changelog ==
 
+= 2.2.3 (2016-04-19) =
+* Fixed: Add leading/trailing spaces to classes to prevent them from being attached to other classes. ( [Props @jtsternberg](https://wordpress.org/support/topic/admin-body-class-is-missing-leading-space-breaking-other-plugins-styling?) )
+
 = 2.2.2 (2016-01-04) =
 * Changed: Bail earlier if the slug comes up null because that means the plugin is doing something derpy.
 
@@ -82,36 +85,4 @@ No special instructions.
 * Updated: Screenshots
 * New: Experiment number 4, larger fonts for old people
 
-= 1.2 (2011-10-05) =
-* New: Experiment number 3, server identification colour coding. Adds a coloured bar to the top of WP admin to easily identify when you're editing dev/staging/live site.
-
-= 1.1.3 (2011-08-21) =
-* Fixed: Bug where post titles were invisible for non admin users. Props RyanImel.
-
-= 1.1.2 (2011-07-20) =
-* New: Experiment #1 support for Custom Post Formats with new icons.
-* New: Classic admin footer bar also added to experiment #2.
-* Fixed: Background labels made properly invisible with new WordPress 3.2 table bg colors.
-* Fixed: Display errors with new admin header when using menu in collapsed mode.
-* Fixed: Experiments will now automatically turn on when the plugin is activated.
-
-= 1.1.1 (2011-07-16) =
-* Fixed: CSS bug in new admin header
-* Fixed: Ollie swearing on the settings page. Bad Ollie.
-
-= 1.1 (2011-07-15) =
-* New: The second UI Labs experiment, brings back a more traditional WordPress admin header. WARNING: Minimum version for this plugin is now WordPress 3.2.
-* New: Settings screen to enable/disable individual experiments. Special thanks to Ollie Read for this.
-
-= 1.0.2 (2011-07-06) =
-* New: WordPress 3.2 compatibility
-* Fixed: Bug where there was no margin between post status labels and post titles.
-* Fixed: Bug where "Header image" labels were being made invisible on the Media management page.
-
-= 1.0.1 (2011-03-23) =
-* New: Support for Private and Password protected post statuses.
-* Fixed: Support for multiple post statuses
-* Screenshot: http://cl.ly/5RgI
-
-= 1.0 (2011-03-23) =
-* New: The first experiment! Colour-Coded Posts Statuses, making it easier to pick out Sticky, Pending, and Draft posts from the edit-posts screen. Mmmmmm shiny.
+(See Changelog.txt for older revisions)

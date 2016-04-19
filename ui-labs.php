@@ -4,7 +4,7 @@ Plugin Name: UI Labs
 Plugin URI: http://halfelf.org/plugins/ui-labs/
 Description: Experimental WordPress admin UI features, ooo shiny!
 Author: John O'Nolan, Mika A Epstein
-Version: 2.2.2
+Version: 2.2.3
 Author URI: http://halfelf.org
 License: GPL-2.0+
 License URI: http://www.opensource.org/licenses/gpl-license.php
@@ -427,7 +427,7 @@ class UI_Labs {
 	 */
 	function admin_body_class( $classes ) {
 		if ( is_admin() && current_user_can( 'administrator' ) ) {
-			$classes .= $this->options['servertype'];
+			$classes .= ' ' . $this->options['servertype'] . ' ';
 		}
 		// Return the $classes array
 		return $classes;

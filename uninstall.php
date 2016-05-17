@@ -12,7 +12,7 @@ if ( !defined( 'WP_UNINSTALL_PLUGIN' ) )
 // Delete 2.0+ options
 delete_option( 'uilabs_options' );
 
-// Delete the old 1.x options
+// Delete the old 1.x options in case they're lying around
 delete_option( 'poststatuses' );
 delete_option( 'adminbar' );
 delete_option( 'identity' );

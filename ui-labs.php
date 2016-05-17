@@ -4,7 +4,7 @@ Plugin Name: UI Labs
 Plugin URI: http://halfelf.org/plugins/ui-labs/
 Description: Experimental WordPress admin UI features, ooo shiny!
 Author: John O'Nolan, Mika A Epstein
-Version: 2.2.3
+Version: 2.2.4
 Author URI: http://halfelf.org
 License: GPL-2.0+
 License URI: http://www.opensource.org/licenses/gpl-license.php
@@ -150,7 +150,7 @@ class UI_Labs {
 		// The Fields
 		add_settings_field( 'poststatuses', 'Colour-Coded Post Statuses', array( &$this, 'poststatuses_callback'), 'ui-labs-settings', 'uilabs-experiments' );
 		add_settings_field( 'pluginage', 'Warn if Plugins Are Old', array( &$this, 'pluginage_callback'), 'ui-labs-settings', 'uilabs-experiments' );
-		add_settings_field( 'toolbar', 'WordPress Toolbar', array( &$this, 'toolbar_callback'), 'ui-labs-settings', 'uilabs-experiments' );
+		add_settings_field( 'toolbar', 'More Toolbar Padding', array( &$this, 'toolbar_callback'), 'ui-labs-settings', 'uilabs-experiments' );
 		add_settings_field( 'dashboard', 'Bigger Dashboard Fonts', array( &$this, 'dashboard_callback'), 'ui-labs-settings', 'uilabs-experiments' );
 		add_settings_field( 'identity', 'Identify This Server', array( &$this, 'identity_callback'), 'ui-labs-settings', 'uilabs-experiments' );
 		
@@ -178,7 +178,7 @@ class UI_Labs {
 	function poststatuses_callback() {
 		?>
 		<input type="checkbox" id="uilabs_options[poststatuses]" name="uilabs_options[poststatuses]" value="yes" <?php echo checked( $this->options['poststatuses'], 'yes', true ); ?> >
-		<label for="uilabs_options[poststatuses]"><?php _e('Add color coded labels to posts to easily identity which needs addressing.', 'ui-labs'); ?></label>
+		<label for="uilabs_options[poststatuses]"><?php _e('Add color coded labels to posts to easily identity their status (draft, scheduled, etc.).', 'ui-labs'); ?></label>
 		<?php
 	}
 
@@ -190,7 +190,7 @@ class UI_Labs {
 	function pluginage_callback() {
 		?>
 		<input type="checkbox" id="uilabs_options[pluginage]" name="uilabs_options[pluginage]" value="yes" <?php echo checked( $this->options['pluginage'], 'yes', true ); ?> >
-		<label for="uilabs_options[pluginage]"><?php _e('Flag plugins if they have not been updated for over two years.', 'ui-labs'); ?></label>
+		<label for="uilabs_options[pluginage]"><?php _e('Flag WordPress.org hosted plugins if they have not been updated for over two years.', 'ui-labs'); ?></label>
 		<?php
 	}
 
@@ -202,7 +202,7 @@ class UI_Labs {
 	function toolbar_callback() {
 		?>
 		<input type="checkbox" id="uilabs_options[toolbar]" name="uilabs_options[toolbar]" value="yes" <?php echo checked( $this->options['toolbar'], 'yes', true ); ?> >
-		<label for="uilabs_options[toolbar]"><?php _e('Adds spacing and padding to the toolbar.', 'ui-labs'); ?></label>
+		<label for="uilabs_options[toolbar]"><?php _e('Add spacing and padding to the toolbar. Also adds a 3.2-esque admin footer.', 'ui-labs'); ?></label>
 	    <?php
 	}
 
@@ -214,7 +214,7 @@ class UI_Labs {
 	function dashboard_callback() {
 		?>
 		<input type="checkbox" id="uilabs_options[dashboard]" name="uilabs_options[dashboard]" value="yes" <?php checked( $this->options['dashboard'], 'yes', true ); ?> >
-		<label for="uilabs_options[dashboard]"><?php _e('Increase the fonts in the admin dashboard.', 'ui-labs'); ?></label>
+		<label for="uilabs_options[dashboard]"><?php _e('Increase the font size in the admin dashboard.', 'ui-labs'); ?></label>
 	    <?php
 	}
 
@@ -243,6 +243,7 @@ class UI_Labs {
 				<option value="uilabs-staging" <?php echo $this->options['servertype'] == 'uilabs-staging' ? ' selected' : '';?> ><?php _e('Staging', 'ui-labs'); ?></option>
 				<option value="uilabs-live" <?php echo $this->options['servertype'] == 'uilabs-live' ? ' selected' : '';?> ><?php _e('Live', 'ui-labs'); ?></option>
 			</select>
+			<p class="description"><?php _e('Select server type. Development is green (safe to edit), Staging is yellow, and Live is red. No cowboy coding!', 'ui-labs'); ?></p>
 		<?php
 	}
 
@@ -380,8 +381,8 @@ class UI_Labs {
 	 */
 	function pluginage_get_last_updated( $slug ) {
 
-		// Bail early - If there's no slug, then this plugin is screwy and should be skipped. Still
-		// return an empty but CACHABLE response.
+		// Bail early - If there's no slug, then this plugin is screwy and should be skipped. 
+		// Return an empty but CACHABLE response.
 		if ( !isset($slug) ) {
 			return '';
 		}
@@ -401,17 +402,14 @@ class UI_Labs {
 			)
 		);
 		
-		if ( 200 != wp_remote_retrieve_response_code( $request ) ) {
-			// Return a false and non-cachable response since we want to try again later
-			return false;
+		if ( 200 != wp_remote_retrieve_response_code( $request ) || empty( $request ) ) {
+			// If there's no response, return with a cacheable response
+			return '';
 		} else {
 			$response = unserialize( wp_remote_retrieve_body( $request ) );
 		}
 		
-		if ( empty( $response ) ) {
-			// Return an empty but cachable response if the plugin isn't in the .org repo
-			return '';
-		} elseif ( isset( $response->last_updated ) ) {
+		if ( isset( $response->last_updated ) ) {
 			return sanitize_text_field( $response->last_updated );
 		} else {
 			return false;
@@ -429,7 +427,6 @@ class UI_Labs {
 		if ( is_admin() && current_user_can( 'administrator' ) ) {
 			$classes .= ' ' . $this->options['servertype'] . ' ';
 		}
-		// Return the $classes array
 		return $classes;
 	}
 
@@ -445,7 +442,6 @@ class UI_Labs {
 		}
 		return $links;
 	}
-
 }
 
 new UI_Labs();

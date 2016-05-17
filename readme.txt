@@ -3,7 +3,7 @@ Contributors: JohnONolan, Ipstenu
 Tags: ui, admin design, experimental
 Requires at least: 4.0
 Tested up to: 4.5
-Stable tag: 2.2.3
+Stable tag: 2.2.4
 License: GPLv2 or later
 
 Experimental WordPress admin UI features, shiny ones.
@@ -20,25 +20,25 @@ Each experiment can be turned on and off from the plugin settings screen under T
 
 <strong>Colour-Coded Post Statuses</strong>
 
-Ever had a page full of posts which were a mix of drafts, stickied posts, pending posts, and private posts? When you have a lot of different post statuses, it's hard to differentiate them all. Experiment #1 applies colour-coding to post statuses to make different types of posts easy to pick out with just a glance.
+Ever had a page full of posts which were a mix of drafts, sticky posts, pending posts, and private posts? When you have a lot of different post statuses, it's hard to differentiate them all. Experiment #1 applies colour-coding to post statuses to make different types of posts easy to pick out with just a glance.
 
-<strong>Toolbar Padding</strong>
+<strong>Warn if Plugins Are Old</strong>
 
-Bringing a little more padding to the WP Toolbar, as well as a more 3.2- type footer. It also adds a little padding to the main content area to make everything feel a little more spacious.
+If a plugin hasn't been updated in more than 2 years, you'll see an alert on the plugin list page.
 
-<strong>Server Identification</strong>
+<strong>More Toolbar Padding</strong>
+
+Bringing a little more padding to the WP Toolbar, as well as a more 3.2-type footer. It also adds a little padding to the main content area to make everything feel a little more spacious.
+
+<strong>Bigger Dashboard Fonts</strong>
+
+Small fonts hurt. This will bump the default font sizes for those of us who need larger fonts.
+
+<strong>Identify This Server</strong>
 
 <em>This is a developer feature.</em>
 
 Sometimes, when developing sites locally, deploying them to a staging server, then deploying to a live server - it can become confusing as to which WordPress admin panel you're logged into. This can have disastrous consequences if you suddenly start deleting stuff on the live server cause you thought the current tab was the staging server. This allows you to enable colour coding for your different servers so that it's always obvious which one you're using right now.
-
-<strong>Larger WP-Admin Fonts</strong>
-
-Small fonts hurt. This will bump the default font sizes for those of us who need larger fonts.
-
-<strong>Old Plugin Warnings</strong>
-
-If a plugin hasn't been updated in more than 2 years, you'll see an alert on the plugin list page.
 
 == Installation ==
 
@@ -52,7 +52,24 @@ No special instructions.
 4. Experiment #4 - Larger WP-Admin fonts
 5. Experiment #5 - Old Plugin Warnings
 
+== FAQ ==
+
+<strong>Will you add X?</strong>
+
+Maybe. It really depends.
+
+<strong>Why is my site slow when I turn on Old Plugin Warning?</strong>
+
+In general, this happens if you have plugins hosted off of WordPress.org that do funny things with the check for updates. Basically they trigger it too many times, and in a way that kicks off this plugin.
+
+<strong>Why is it spelled 'Colour'?</strong>
+
+The original author spells it that way. I don't change it out of respect.
+
 == Changelog ==
+
+= 2.2.4 (2016-05-17) =
+* Changed: Made plugin age more cacheable.
 
 = 2.2.3 (2016-04-19) =
 * Fixed: Add leading/trailing spaces to classes to prevent them from being attached to other classes. ( [Props @jtsternberg](https://wordpress.org/support/topic/admin-body-class-is-missing-leading-space-breaking-other-plugins-styling?) )

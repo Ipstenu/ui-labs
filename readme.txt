@@ -2,7 +2,7 @@
 Contributors: JohnONolan, Ipstenu
 Tags: ui, admin design, experimental
 Requires at least: 4.0
-Tested up to: 4.5
+Tested up to: 4.6
 Stable tag: 2.2.4
 License: GPLv2 or later
 
@@ -64,11 +64,11 @@ In general, this happens if you have plugins hosted off of WordPress.org that do
 
 <strong>Why is it spelled 'Colour'?</strong>
 
-The original author spells it that way. I don't change it out of respect.
+The original author spelled it that way, being from a place where that was how it's spelled. I don't change it out of respect for John. Besides, it adds flavour.
 
 == Changelog ==
 
-= 2.2.4 (2016-05-17) =
+= 2.2.4 (2016-06-06) =
 * Changed: Made plugin age more cacheable.
 
 = 2.2.3 (2016-04-19) =

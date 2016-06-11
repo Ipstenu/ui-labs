@@ -4,10 +4,11 @@ Plugin Name: UI Labs
 Plugin URI: http://halfelf.org/plugins/ui-labs/
 Description: Experimental WordPress admin UI features, ooo shiny!
 Author: John O'Nolan, Mika A Epstein
-Version: 2.2.4
+Version: 3.0
 Author URI: http://halfelf.org
 License: GPL-2.0+
 License URI: http://www.opensource.org/licenses/gpl-license.php
+Network: True
 */
 
 /**
@@ -26,11 +27,10 @@ class UI_Labs {
 
 	// Holds option data.
     var $option_name = 'uilabs_options';
-    var $options = array();
     var $option_defaults;
     
     // DB version, for schema upgrades.
-    var $db_version = 1;
+    var $db_version = 3;
 
 	// Instance
 	static $instance;
@@ -50,19 +50,44 @@ class UI_Labs {
 		add_action( 'admin_init', array( &$this, 'admin_init' ) );
 
 		//add admin panel
-		add_action( 'admin_menu', array( &$this, 'admin_menu' ) );
+		if ( is_multisite() ) {
+			add_action( 'network_admin_menu', array( &$this, 'network_admin_menu' ) );
+			add_action( 'current_screen', array( &$this, 'network_admin_screen') );
+		} else {
+			add_action( 'admin_menu', array( &$this, 'admin_menu' ) );
+		}
 
-    	// Setting plugin defaults here:
+    		// Setting plugin defaults here:
 		$this->option_defaults = array(
 			'poststatuses'	=> 'yes',
 			'pluginage' 		=> 'no',
 	        'toolbar' 		=> 'no',
 	        'dashboard' 		=> 'no',
 	        'identity' 		=> 'no',
+	        'footer'			=> 'no',
 	        'servertype' 	=> 'uilabs-blank',
 	        'db_version' 	=> $this->db_version,
 	    );
 
+        // Fetch and set up options.
+	    $this->options = wp_parse_args( get_site_option( $this->option_name ), $this->option_defaults );
+
+	    // check if DB needs to be upgraded (this will merge old settings to new)
+	    $naked_options = get_site_option( $this->option_name );
+	    $single_options = get_blog_option( BLOG_ID_CURRENT_SITE, $this->option_name );
+	    
+	    if ( !isset( $naked_options['db_version'] ) || $naked_options['db_version'] < $this->db_version || $single_options['db_version'] < $this->db_version ) {
+		    
+		    if ( $single_options['db_version'] < $this->db_version ) {
+			    $current_db_version = $single_options['db_version'];
+		    } else {
+			    $current_db_version = isset( $naked_options['db_version'] ) ? $naked_options['db_version'] : 0;
+		    }
+	        
+	        //run upgrade and store new version #
+	        $this->upgrade( $current_db_version );
+	    }
+	 
 	}
 
 	/**
@@ -71,60 +96,48 @@ class UI_Labs {
 	 * @since 2.0
 	 */
     function admin_init() {
-
 		// Add link to settings from plugins listing page
 		add_filter( 'plugin_action_links', array( $this, 'add_settings_link'), 10, 2 );
-		
-		// Register filter display_post_states
-		add_filter( 'display_post_states', array( &$this, 'display_post_states') );
-
-        //Fetch and set up options.
-	    $this->options = wp_parse_args( get_option( 'uilabs_options' ), $this->option_defaults );
-		
-		// Allows experiments to be turned on/off, written by Ollie Read
-		if( $this->options['poststatuses'] == 'yes') {
-			wp_register_style('ui-labs-poststatuses', plugins_url('css/poststatuses.css', __FILE__), false, '9001');
-			wp_enqueue_style('ui-labs-poststatuses');
-		}
-		if( $this->options['pluginage'] == 'yes') {
-			wp_register_style('ui-labs-pluginage', plugins_url('css/pluginage.css', __FILE__), false, '9001');
-			wp_enqueue_style('ui-labs-pluginage');
-			add_action( 'after_plugin_row', array( &$this, 'pluginage_row'), 10, 2 );
-		}
-		if( $this->options['toolbar'] == 'yes') {
-			wp_register_style('ui-labs-toolbar', plugins_url('css/toolbar.css', __FILE__), false, '9001');
-			wp_enqueue_style('ui-labs-toolbar');
-		}
-		if( $this->options['dashboard'] == 'yes') {
-			wp_register_style('ui-labs-dashboard', plugins_url('css/dashboard.css', __FILE__), false, '9001');
-			wp_enqueue_style('ui-labs-dashboard');
-		}
-		if( $this->options['identity'] == 'yes') {
-			wp_register_style('ui-labs-identity', plugins_url('css/identity.css', __FILE__), false, '9001');
-			wp_enqueue_style('ui-labs-identity');
-		}
-		
-		// Filter for the admin body class
-		add_filter('admin_body_class', array( &$this, 'admin_body_class') );
-
-	    // check if DB needs to be upgraded (this will merge old settings to new)
-	    if ( false === $this->options || ! isset( $this->options['db_version'] ) || $this->options['db_version'] < $this->db_version ) {
-	    	//init options array
-	        if ( ! is_array( $this->options ) ) {
-	            $this->options = array();          
-	            //establish DB version
-	            $current_db_version = isset( $this->options['db_version'] ) ? $this->options['db_version'] : 0;
-
-	            //run upgrade and store new version #
-	            $this->upgrade( $current_db_version );
-	            $this->options['db_version'] = $this->db_version;
-	            update_option( $this->option_name, $this->options );
-	        }        
-	    }
 	    
 	    // Register Settings
 		$this->register_settings();
 	}
+
+    /**
+	 * Upgrades Database
+	 *
+	 * @param int $current_db_version the current DB version
+	 * @since 2.0
+	 */
+	function upgrade( $current_db_version ) {
+	    if ( $current_db_version < 1 ) {
+		    // Migrate old options to new
+	        $this->options['poststatuses'] = get_option('poststatuses');
+	        $this->options['toolbar'] = get_option('adminbar');
+	        $this->options['identity'] = get_option('identity');
+	        $this->options['servertype'] = get_option('servertype');
+	        	$this->options['db_version'] = '1';
+	        
+	        // Delete old options
+	        delete_option( 'poststatuses' );
+	        delete_option( 'adminbar' );
+	        delete_option( 'identity' );
+	        delete_option( 'servertype' );
+	    } 
+	    
+	    if ( $current_db_version < 3 ) {
+		    if ( is_multisite() ) {
+			    $mainoptions = get_blog_option( BLOG_ID_CURRENT_SITE, $this->option_name );
+			    $mainoptions['db_version'] = '3';
+			    update_blog_option( BLOG_ID_CURRENT_SITE, $this->option_name, $mainoptions );
+			    $this->options = $mainoptions;
+		    } 
+			$this->options['footer'] = $this->options['toolbar'];
+			$this->options['db_version'] = '3';
+		}
+		
+		update_site_option( $this->option_name, $this->options );
+    }
 
 	/**
 	 * Admin Menu Callback
@@ -137,26 +150,108 @@ class UI_Labs {
 	}
 
 	/**
+	 * Network Admin Menu Callback
+	 *
+	 * @since 3.0
+	 */
+    function network_admin_menu() {
+		add_submenu_page( 'settings.php', __('UI Labs'), __('UI Labs'), 'manage_options', 'ui-labs-network-settings', array( &$this, 'uilabs_settings' ) );
+	}
+
+	/**
+	 * Network Admin Screen Callback
+	 *
+	 * @since 3.0
+	 */
+
+	function network_admin_screen() {
+	    $current_screen = get_current_screen();
+	
+	    if( $current_screen->id === "settings_page_ui-labs-network-settings-network" ) {
+	
+	        	if ( isset($_POST['update'] ) && check_admin_referer( 'uilabs_networksave') ) {
+				
+			$options = $this->options;
+			$input = $_POST['uilabs_options'];
+			
+			foreach ( $options as $key=>$value ) {
+		       if ( !isset($input[$key]) || is_null( $input[$key] ) || $input[$key] == '0' ) {
+			        $output[$key] = 'no';
+		        } else {
+			        $output[$key] = sanitize_text_field($input[$key]);
+		        }
+			}
+			
+			$this->options = $output;
+			
+			update_site_option( $this->option_name , $output );
+			?><div class="notice notice-success is-dismissible"><p><strong><?php _e('Options Updated!', 'ui-labs'); ?></strong></p></div><?php
+			}
+	    }
+	    
+		// Allows experiments to be turned on/off, written by Ollie Read
+		
+		// Post Statuses
+		if( $this->options['poststatuses'] == 'yes') {
+			add_filter( 'display_post_states', array( &$this, 'display_post_states') );
+			wp_register_style('ui-labs-poststatuses', plugins_url('css/poststatuses.css', __FILE__), false, '9001');
+			wp_enqueue_style('ui-labs-poststatuses');
+		}
+		
+		// Show Plugin Age
+		if( ( $this->options['pluginage'] == 'yes' || $this->options['pluginage'] == 'all' ) || ( $this->options['pluginage'] !== 'no' && is_network_admin() ) ) {
+			wp_register_style('ui-labs-pluginage', plugins_url('css/pluginage.css', __FILE__), false, '9001');
+			wp_enqueue_style('ui-labs-pluginage');
+			add_action( 'after_plugin_row', array( &$this, 'pluginage_row'), 10, 2 );
+		}
+		
+		// Change toolbar padding
+		if( $this->options['toolbar'] == 'yes' ) {
+			wp_register_style('ui-labs-toolbar', plugins_url('css/toolbar.css', __FILE__), false, '9001');
+			wp_enqueue_style('ui-labs-toolbar');
+		}
+
+		// Change footer
+		if( $this->options['footer'] == 'yes' ) {
+			wp_register_style('ui-labs-footer', plugins_url('css/footer.css', __FILE__), false, '9001');
+			wp_enqueue_style('ui-labs-footer');
+		}
+				
+		// Make dashboard bigger fonts
+		if( $this->options['dashboard'] == 'yes' ) {
+			wp_register_style('ui-labs-dashboard', plugins_url('css/dashboard.css', __FILE__), false, '9001');
+			wp_enqueue_style('ui-labs-dashboard');
+		}
+		
+		// Identify server
+		if( $this->options['identity'] == 'yes' ) {
+			wp_register_style('ui-labs-identity', plugins_url('css/identity.css', __FILE__), false, '9001');
+			wp_enqueue_style('ui-labs-identity');
+		}
+		
+		// Filter for the admin body class
+		add_filter('admin_body_class', array( &$this, 'admin_body_class') );
+
+	}
+
+	/**
 	 * Register Admin Settings
 	 *
 	 * @since 2.0
 	 */
     function register_settings() {
-	    register_setting( 'ui-labs', 'uilabs_options', array( $this, 'uilabs_sanitize' ) );
+	    register_setting( 'ui-labs', 'uilabs_options', array( &$this, 'uilabs_sanitize' ) );
 
 		// The main section
 		add_settings_section( 'uilabs-experiments', 'Experiments to make your site cooler', array( &$this, 'uilabs_experiments_callback'), 'ui-labs-settings' );
 
 		// The Fields
 		add_settings_field( 'poststatuses', 'Colour-Coded Post Statuses', array( &$this, 'poststatuses_callback'), 'ui-labs-settings', 'uilabs-experiments' );
-		add_settings_field( 'pluginage', 'Warn if Plugins Are Old', array( &$this, 'pluginage_callback'), 'ui-labs-settings', 'uilabs-experiments' );
 		add_settings_field( 'toolbar', 'More Toolbar Padding', array( &$this, 'toolbar_callback'), 'ui-labs-settings', 'uilabs-experiments' );
+		add_settings_field( 'footer', '3.2-esque Footer', array( &$this, 'footer_callback'), 'ui-labs-settings', 'uilabs-experiments' );
 		add_settings_field( 'dashboard', 'Bigger Dashboard Fonts', array( &$this, 'dashboard_callback'), 'ui-labs-settings', 'uilabs-experiments' );
+		add_settings_field( 'pluginage', 'Warn if Plugins Are Old', array( &$this, 'pluginage_callback'), 'ui-labs-settings', 'uilabs-experiments' );
 		add_settings_field( 'identity', 'Identify This Server', array( &$this, 'identity_callback'), 'ui-labs-settings', 'uilabs-experiments' );
-		
-		if( isset($this->options['identity'] ) && $this->options['identity'] == 'yes') {
-			add_settings_field( 'servertype', 'Server Type', array( &$this, 'servertype_callback'), 'ui-labs-settings', 'uilabs-experiments' );
-		}
 	}
 
 	/**
@@ -177,8 +272,8 @@ class UI_Labs {
 	 */
 	function poststatuses_callback() {
 		?>
-		<input type="checkbox" id="uilabs_options[poststatuses]" name="uilabs_options[poststatuses]" value="yes" <?php echo checked( $this->options['poststatuses'], 'yes', true ); ?> >
-		<label for="uilabs_options[poststatuses]"><?php _e('Add color coded labels to posts to easily identity their status (draft, scheduled, etc.).', 'ui-labs'); ?></label>
+			<input type="checkbox" id="uilabs_options[poststatuses]" name="uilabs_options[poststatuses]" value="yes" <?php echo checked( $this->options['poststatuses'], 'yes', true ); ?> >
+			<label for="uilabs_options[poststatuses]"><?php _e('Add colour coded labels to posts to easily identity their status (draft, scheduled, etc.).', 'ui-labs'); ?></label>
 		<?php
 	}
 
@@ -188,10 +283,21 @@ class UI_Labs {
 	 * @since 2.2
 	 */
 	function pluginage_callback() {
-		?>
-		<input type="checkbox" id="uilabs_options[pluginage]" name="uilabs_options[pluginage]" value="yes" <?php echo checked( $this->options['pluginage'], 'yes', true ); ?> >
-		<label for="uilabs_options[pluginage]"><?php _e('Flag WordPress.org hosted plugins if they have not been updated for over two years.', 'ui-labs'); ?></label>
-		<?php
+		if ( is_multisite() ) {
+			?>
+			<select id="uilabs_options[pluginage]" name="uilabs_options[pluginage]">
+				<option value="no" <?php echo $this->options['pluginage'] == 'no' ? ' selected' : '';?> >  <?php _e('Never', 'ui-labs'); ?></option>
+				<option value="network" <?php echo $this->options['pluginage'] == 'network' ? ' selected' : '';?> ><?php _e('Network Admin Only', 'ui-labs'); ?></option>
+				<option value="all" <?php echo $this->options['pluginage'] == 'all' ? ' selected' : '';?> ><?php _e('Network and Per Site', 'ui-labs'); ?></option>
+			</select>
+			<p class="description"><?php _e('Flag WordPress.org hosted plugins if they have not been updated for over two years. Warning: This may slow your admin dashboard.', 'ui-labs'); ?></p>
+			<?php
+		} else {
+			?>
+			<input type="checkbox" id="uilabs_options[pluginage]" name="uilabs_options[pluginage]" value="yes" <?php echo checked( $this->options['pluginage'], 'yes', true ); ?> >
+			<label for="uilabs_options[pluginage]"><?php _e('Flag WordPress.org hosted plugins if they have not been updated for over two years. Warning: This may slow your admin dashboard.', 'ui-labs'); ?></label>
+			<?php
+		}
 	}
 
 	/**
@@ -202,7 +308,19 @@ class UI_Labs {
 	function toolbar_callback() {
 		?>
 		<input type="checkbox" id="uilabs_options[toolbar]" name="uilabs_options[toolbar]" value="yes" <?php echo checked( $this->options['toolbar'], 'yes', true ); ?> >
-		<label for="uilabs_options[toolbar]"><?php _e('Add spacing and padding to the toolbar. Also adds a 3.2-esque admin footer.', 'ui-labs'); ?></label>
+		<label for="uilabs_options[toolbar]"><?php _e('Add spacing and padding to the toolbar.', 'ui-labs'); ?></label>
+	    <?php
+	}
+
+	/**
+	 * 3.2 esque Footer
+	 *
+	 * @since 3.0
+	 */
+	function footer_callback() {
+		?>
+		<input type="checkbox" id="uilabs_options[footer]" name="uilabs_options[footer]" value="yes" <?php echo checked( $this->options['footer'], 'yes', true ); ?> >
+		<label for="uilabs_options[footer]"><?php _e('Restore a 3.2-esque admin footer.', 'ui-labs'); ?></label>
 	    <?php
 	}
 
@@ -227,46 +345,48 @@ class UI_Labs {
 		?>
 		<input type="checkbox" id="uilabs_options[identity]" name="uilabs_options[identity]" value="yes" <?php checked( $this->options['identity'], 'yes', true ); ?> >
 		<label for="uilabs_options[identity]"><?php _e('Enable colour coding for your different servers for quick identification.', 'ui-labs'); ?></label>
-		<?php
-	}
 
-	/**
-	 * Server Type Server
-	 *
-	 * @since 2.0
-	 */
-	function servertype_callback() {
-		?>
+		<?php
+		if( isset($this->options['identity'] ) && $this->options['identity'] !== 'no' ) {
+			?>
+			<p>&nbsp;</p>
 			<select id="uilabs_options[servertype]" name="uilabs_options[servertype]">
 				<option value="uilabs-blank" <?php echo $this->options['servertype'] == 'uilabs-blank' ? ' selected' : '';?> > -- </option>
 				<option value="uilabs-development" <?php echo $this->options['servertype'] == 'uilabs-development' ? ' selected' : '';?> ><?php _e('Development', 'ui-labs'); ?></option>
 				<option value="uilabs-staging" <?php echo $this->options['servertype'] == 'uilabs-staging' ? ' selected' : '';?> ><?php _e('Staging', 'ui-labs'); ?></option>
 				<option value="uilabs-live" <?php echo $this->options['servertype'] == 'uilabs-live' ? ' selected' : '';?> ><?php _e('Live', 'ui-labs'); ?></option>
 			</select>
-			<p class="description"><?php _e('Select server type. Development is green (safe to edit), Staging is yellow, and Live is red. No cowboy coding!', 'ui-labs'); ?></p>
-		<?php
+			<p class="description"><?php _e('Select server type. Development colour is green (safe to edit), Staging is yellow, and Live is red. No cowboy coding!', 'ui-labs'); ?></p>
+			<?php
+		}
 	}
 
 	/**
 	 * Call settings page
 	 *
 	 * @since 1.0
-	 */
-	
+	 */	
 	function uilabs_settings() { 
 		?>
 
 		<div class="wrap">
 			
-		<h2><?php _e( 'UI Labs', 'ui-labs' ); ?></h2>
+		<h1><?php _e( 'UI Labs', 'ui-labs' ); ?></h1>
 		
-		<form action="options.php" method="POST" >
-		    <?php 
-			    settings_fields('ui-labs');
+		<?php settings_errors();
+		
+		if ( is_network_admin() ) {
+			?><form method="post" width='1'><?php
+				wp_nonce_field( 'uilabs_networksave' ); 
+		} else {
+			?><form action="options.php" method="POST" ><?php
+				settings_fields('ui-labs');
+		}
+
 			    do_settings_sections( 'ui-labs-settings' );
-			    submit_button();
+			    submit_button( '', 'primary', 'update');
 		    ?>
-		</form>
+			</form>
 		</div>
 		<?php
 	}
@@ -278,11 +398,12 @@ class UI_Labs {
 	 * @since 2.0
 	 */
 	function uilabs_sanitize( $input ) {
-    	$options = $this->options;
-    	
-    	$input['db_version'] = $this->db_version;
+		
+		$options = $this->options;
 
-    	foreach ($options as $key=>$value) {
+    		$input['db_version'] = $this->db_version;
+
+		foreach ($options as $key=>$value) {
             if ( !isset($input[$key]) || is_null( $input[$key] ) || $input[$key] == '0' ) {
 	            $output[$key] = 'no';
             } else {
@@ -292,29 +413,6 @@ class UI_Labs {
 
 		return $output;
 	}
-
-    /**
-	 * Upgrades Database
-	 *
-	 * @param int $current_db_version the current DB version
-	 * @since 2.0
-	 */
-	function upgrade( $current_db_version ) {
-	    if ( $current_db_version < 1 ) {
-		    // Migrate old options to new
-	        $this->options['poststatuses'] = get_option('poststatuses');
-	        $this->options['toolbar'] = get_option('adminbar');
-	        $this->options['identity'] = get_option('identity');
-	        $this->options['servertype'] = get_option('servertype');
-	        update_option( $this->option_name, $this->options );
-	        
-	        // Delete old options
-	        delete_option( 'poststatuses' );
-	        delete_option( 'adminbar' );
-	        delete_option( 'identity' );
-	        delete_option( 'servertype' );
-	    }
-    }
 
 	/**
 	 * Modify the output of post statuses

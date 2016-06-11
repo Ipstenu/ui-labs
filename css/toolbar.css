@@ -1,10 +1,6 @@
 /*------------------------------------------------------------------------------
-  2.0 - New Admin Header
+  Toolbar Padding
 ------------------------------------------------------------------------------*/
-
-#wpcontent, #footer {
-	margin-left:146px;
-}
 
 #wpbody {
 	margin-left:14px;
@@ -29,22 +25,15 @@
     width: 95% !important;
 }
 
-/*footer*/
-#wpfooter {
-	height:14px;
-	padding-top:5px;
-	padding-left:37px;
-	padding-right:34px;
-	margin-right:0;
-	border-bottom:#dfdfdf 1px solid;
-	text-shadow:#fff 0 1px 0;
-	background:#ddd;
+.js.folded #wphead {
+	height:30px;
 }
 
 /*collapsed menu styles*/
 .js.folded #wpcontent, .js.folded #footer {
 	margin-left:33px;
 }
-.js.folded #wphead {
-	height:30px;
+
+#wpcontent, #footer {
+	margin-left:146px;
 }

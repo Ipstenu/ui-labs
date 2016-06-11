@@ -10,7 +10,11 @@ if ( !defined( 'WP_UNINSTALL_PLUGIN' ) )
     exit();
 
 // Delete 2.0+ options
-delete_option( 'uilabs_options' );
+if ( is_multisite() ) {
+    delete_site_option('uilabs_network_options');
+} else {
+    delete_option('uilabs_options');
+}
 
 // Delete the old 1.x options in case they're lying around
 delete_option( 'poststatuses' );

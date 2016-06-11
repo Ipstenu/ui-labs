@@ -1,3 +1,36 @@
+= 2.2.4 (2016-06-06) =
+* Changed: Made plugin age more cacheable.
+
+= 2.2.3 (2016-04-19) =
+* Fixed: Add leading/trailing spaces to classes to prevent them from being attached to other classes. ( [Props @jtsternberg](https://wordpress.org/support/topic/admin-body-class-is-missing-leading-space-breaking-other-plugins-styling?) )
+
+= 2.2.2 (2016-01-04) =
+* Changed: Bail earlier if the slug comes up null because that means the plugin is doing something derpy.
+
+= 2.2.1 (2015-11-30) =
+* Fixed: An unexpected T_PAAMAYIM_NEKUDOTAYIM occurred.
+
+= 2.2.0 (2015-10-07) =
+* New: Experiment number 5, added warnings for plugins over 2 years old
+
+= 2.1.1 (2015-08-21) =
+* Fixed: CSS with scheduled posts was off because of a change I missed in core!
+
+= 2.1 (2015-02-11) =
+* Changed: CSS trickery to show the scheduled posts with a fake button
+* Fixed: Array state of stupidity with post states
+
+= 2.0 (2015-01-26) =
+* Notice: Forked from original by John O'Nolan with the intent to merge and/or take over.
+* Changed: Removed images in order to use Dashicons instead.
+* Changed: Moved CSS to subfolder for organization.
+* Changed: Moved settings page to Tools.
+* Changed: Modernized code via singleton, settings UI, shared options (upgrade will keep 'em intact).
+* Fixed: Proper use of plugins_url (we should never be calling our plugin folder by name).
+* Fixed: Removed post-format images since that's in core now.
+* Fixed: Experiment number 2, updated for the WP 4.0 world.
+* Updated: Screenshots
+* New: Experiment number 4, larger fonts for old people
 
 = 1.2 (2011-10-05) =
 * New: Experiment number 3, server identification colour coding. Adds a coloured bar to the top of WP admin to easily identify when you're editing dev/staging/live site.

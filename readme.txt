@@ -77,7 +77,7 @@ The original author spelled it that way, being from a place where that was how i
 
 == Changelog ==
 
-= 3.0 (2016-XX) =
+= 3.0 (2016-07) =
 * Separated: Footer and padding
 * Added: Multisite Support
 
@@ -85,4 +85,4 @@ The original author spelled it that way, being from a place where that was how i
 
 == Update Notice ==
 
-If you're on Multisite, things were moved.
+If you're on Multisite, things were moved. All your main site settings were imported.

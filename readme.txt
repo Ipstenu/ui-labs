@@ -65,7 +65,7 @@ Maybe. It really depends.
 
 <strong>Why is my site slow when I turn on Old Plugin Warning?</strong>
 
-In general, this happens if you have plugins hosted off of WordPress.org that do funny things with the check for updates. Basically they trigger it too many times, and in a way that kicks off this plugin.
+In general, this happens if you have plugins hosted off of WordPress.org that do funny things with the check for updates. Basically they trigger it too many times, and in a way that kicks off this plugin. This should only slow down the plugin check.
 
 <strong>Why are the settings only editable by the Network Admin on Multisite?</strong>
 
@@ -85,4 +85,4 @@ The original author spelled it that way, being from a place where that was how i
 
 == Update Notice ==
 
-If you're on Multisite, things were moved. All your main site settings were imported.
+If you're on Multisite, things were moved. All your main site settings were imported to network defaults.

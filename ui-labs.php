@@ -36,7 +36,7 @@ class UI_Labs {
 	static $instance;
 
     /**
-     * Constuct
+     * Construct
      * Fires when class is constructed, adds init hook
      *
      * @since 2.0
@@ -97,7 +97,8 @@ class UI_Labs {
 	 */
     function admin_init() {
 		// Add link to settings from plugins listing page
-		add_filter( 'plugin_action_links', array( $this, 'add_settings_link'), 10, 2 );
+		$plugin = plugin_basename(__FILE__);
+		add_filter("plugin_action_links_$plugin", array( &$this, 'add_settings_link' ) );
 	    
 	    // Register Settings
 		$this->register_settings();
@@ -146,7 +147,7 @@ class UI_Labs {
 	 */
     function admin_menu() {
 		// Add settings page on Tools
-		add_management_page( __('UI Labs'), __('UI Labs'), 'manage_options', 'ui-labs-settings', array( &$this, 'uilabs_settings' ) );
+		add_management_page( __('UI Labs', 'ui-labs'), __('UI Labs', 'ui-labs'), 'manage_options', 'ui-labs-settings', array( &$this, 'uilabs_settings' ) );
 	}
 
 	/**
@@ -155,7 +156,7 @@ class UI_Labs {
 	 * @since 3.0
 	 */
     function network_admin_menu() {
-		add_submenu_page( 'settings.php', __('UI Labs'), __('UI Labs'), 'manage_options', 'ui-labs-network-settings', array( &$this, 'uilabs_settings' ) );
+		add_submenu_page( 'settings.php', __('UI Labs', 'ui-labs'), __('UI Labs', 'ui-labs'), 'manage_options', 'ui-labs-network-settings', array( &$this, 'uilabs_settings' ) );
 	}
 
 	/**
@@ -182,6 +183,7 @@ class UI_Labs {
 		        }
 			}
 			
+			$output['db_version'] = $this->db_version;
 			$this->options = $output;
 			
 			update_site_option( $this->option_name , $output );
@@ -243,15 +245,15 @@ class UI_Labs {
 	    register_setting( 'ui-labs', 'uilabs_options', array( &$this, 'uilabs_sanitize' ) );
 
 		// The main section
-		add_settings_section( 'uilabs-experiments', 'Experiments to make your site cooler', array( &$this, 'uilabs_experiments_callback'), 'ui-labs-settings' );
+		add_settings_section( 'uilabs-experiments', __('Experiments to make your site cooler', 'ui-labs'), array( &$this, 'uilabs_experiments_callback'), 'ui-labs-settings' );
 
 		// The Fields
-		add_settings_field( 'poststatuses', 'Colour-Coded Post Statuses', array( &$this, 'poststatuses_callback'), 'ui-labs-settings', 'uilabs-experiments' );
-		add_settings_field( 'toolbar', 'More Toolbar Padding', array( &$this, 'toolbar_callback'), 'ui-labs-settings', 'uilabs-experiments' );
-		add_settings_field( 'footer', '3.2-esque Footer', array( &$this, 'footer_callback'), 'ui-labs-settings', 'uilabs-experiments' );
-		add_settings_field( 'dashboard', 'Bigger Dashboard Fonts', array( &$this, 'dashboard_callback'), 'ui-labs-settings', 'uilabs-experiments' );
-		add_settings_field( 'pluginage', 'Warn if Plugins Are Old', array( &$this, 'pluginage_callback'), 'ui-labs-settings', 'uilabs-experiments' );
-		add_settings_field( 'identity', 'Identify This Server', array( &$this, 'identity_callback'), 'ui-labs-settings', 'uilabs-experiments' );
+		add_settings_field( 'poststatuses', __('Colour-Coded Post Statuses', 'ui-labs'), array( &$this, 'poststatuses_callback'), 'ui-labs-settings', 'uilabs-experiments' );
+		add_settings_field( 'toolbar', __('More Toolbar Padding', 'ui-labs'), array( &$this, 'toolbar_callback'), 'ui-labs-settings', 'uilabs-experiments' );
+		add_settings_field( 'footer', __('3.2-esque Footer', 'ui-labs'), array( &$this, 'footer_callback'), 'ui-labs-settings', 'uilabs-experiments' );
+		add_settings_field( 'dashboard', __('Bigger Dashboard Fonts', 'ui-labs'), array( &$this, 'dashboard_callback'), 'ui-labs-settings', 'uilabs-experiments' );
+		add_settings_field( 'pluginage', __('Warn if Plugins Are Old', 'ui-labs'), array( &$this, 'pluginage_callback'), 'ui-labs-settings', 'uilabs-experiments' );
+		add_settings_field( 'identity', __('Identify This Server', 'ui-labs'), array( &$this, 'identity_callback'), 'ui-labs-settings', 'uilabs-experiments' );
 	}
 
 	/**

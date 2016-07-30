@@ -4,7 +4,7 @@ Plugin Name: UI Labs
 Plugin URI: http://halfelf.org/plugins/ui-labs/
 Description: Experimental WordPress admin UI features, ooo shiny!
 Author: John O'Nolan, Mika A Epstein
-Version: 3.0.1
+Version: 3.0.2
 Author URI: http://halfelf.org
 License: GPL-2.0+
 License URI: http://www.opensource.org/licenses/gpl-license.php
@@ -106,6 +106,49 @@ class UI_Labs {
 
 	    // Register Settings
 		$this->register_settings();
+
+		// Allows experiments to be turned on/off, written by Ollie Read
+
+		// Post Statuses
+		if( $this->options['poststatuses'] == 'yes') {
+			add_filter( 'display_post_states', array( &$this, 'display_post_states') );
+			wp_register_style('ui-labs-poststatuses', plugins_url('css/poststatuses.css', __FILE__), false, '9001');
+			wp_enqueue_style('ui-labs-poststatuses');
+		}
+
+		// Show Plugin Age
+		if( ( $this->options['pluginage'] == 'yes' || $this->options['pluginage'] == 'all' ) || ( $this->options['pluginage'] !== 'no' && is_network_admin() ) ) {
+			wp_register_style('ui-labs-pluginage', plugins_url('css/pluginage.css', __FILE__), false, '9001');
+			wp_enqueue_style('ui-labs-pluginage');
+			add_action( 'after_plugin_row', array( &$this, 'pluginage_row'), 10, 2 );
+		}
+
+		// Change toolbar padding
+		if( $this->options['toolbar'] == 'yes' ) {
+			wp_register_style('ui-labs-toolbar', plugins_url('css/toolbar.css', __FILE__), false, '9001');
+			wp_enqueue_style('ui-labs-toolbar');
+		}
+
+		// Change footer
+		if( $this->options['footer'] == 'yes' ) {
+			wp_register_style('ui-labs-footer', plugins_url('css/footer.css', __FILE__), false, '9001');
+			wp_enqueue_style('ui-labs-footer');
+		}
+
+		// Make dashboard bigger fonts
+		if( $this->options['dashboard'] == 'yes' ) {
+			wp_register_style('ui-labs-dashboard', plugins_url('css/dashboard.css', __FILE__), false, '9001');
+			wp_enqueue_style('ui-labs-dashboard');
+		}
+
+		// Identify server
+		if( $this->options['identity'] == 'yes' ) {
+			wp_register_style('ui-labs-identity', plugins_url('css/identity.css', __FILE__), false, '9001');
+			wp_enqueue_style('ui-labs-identity');
+		}
+
+		// Filter for the admin body class
+		add_filter('admin_body_class', array( &$this, 'admin_body_class') );
 	}
 
     /**
@@ -194,50 +237,6 @@ class UI_Labs {
 			?><div class="notice notice-success is-dismissible"><p><strong><?php _e('Options Updated!', 'ui-labs'); ?></strong></p></div><?php
 			}
 	    }
-
-		// Allows experiments to be turned on/off, written by Ollie Read
-
-		// Post Statuses
-		if( $this->options['poststatuses'] == 'yes') {
-			add_filter( 'display_post_states', array( &$this, 'display_post_states') );
-			wp_register_style('ui-labs-poststatuses', plugins_url('css/poststatuses.css', __FILE__), false, '9001');
-			wp_enqueue_style('ui-labs-poststatuses');
-		}
-
-		// Show Plugin Age
-		if( ( $this->options['pluginage'] == 'yes' || $this->options['pluginage'] == 'all' ) || ( $this->options['pluginage'] !== 'no' && is_network_admin() ) ) {
-			wp_register_style('ui-labs-pluginage', plugins_url('css/pluginage.css', __FILE__), false, '9001');
-			wp_enqueue_style('ui-labs-pluginage');
-			add_action( 'after_plugin_row', array( &$this, 'pluginage_row'), 10, 2 );
-		}
-
-		// Change toolbar padding
-		if( $this->options['toolbar'] == 'yes' ) {
-			wp_register_style('ui-labs-toolbar', plugins_url('css/toolbar.css', __FILE__), false, '9001');
-			wp_enqueue_style('ui-labs-toolbar');
-		}
-
-		// Change footer
-		if( $this->options['footer'] == 'yes' ) {
-			wp_register_style('ui-labs-footer', plugins_url('css/footer.css', __FILE__), false, '9001');
-			wp_enqueue_style('ui-labs-footer');
-		}
-
-		// Make dashboard bigger fonts
-		if( $this->options['dashboard'] == 'yes' ) {
-			wp_register_style('ui-labs-dashboard', plugins_url('css/dashboard.css', __FILE__), false, '9001');
-			wp_enqueue_style('ui-labs-dashboard');
-		}
-
-		// Identify server
-		if( $this->options['identity'] == 'yes' ) {
-			wp_register_style('ui-labs-identity', plugins_url('css/identity.css', __FILE__), false, '9001');
-			wp_enqueue_style('ui-labs-identity');
-		}
-
-		// Filter for the admin body class
-		add_filter('admin_body_class', array( &$this, 'admin_body_class') );
-
 	}
 
 	/**

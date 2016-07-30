@@ -3,7 +3,7 @@ Contributors: JohnONolan, Ipstenu
 Tags: ui, admin design, experimental
 Requires at least: 4.0
 Tested up to: 4.6
-Stable tag: 3.0
+Stable tag: 3.0.1
 License: GPLv2 or later
 
 Experimental WordPress admin UI features, shiny ones.
@@ -76,6 +76,9 @@ Because Multisite.
 The original author spelled it that way, being from a place where that was how it's spelled. I don't change it out of respect for John. Besides, it adds flavour.
 
 == Changelog ==
+
+= 3.0.1 (2016-07) =
+* Fixed: Failure to check `is_multisite` properly which broke single site. SO so sory.r
 
 = 3.0 (2016-07) =
 * Separated: Footer and padding

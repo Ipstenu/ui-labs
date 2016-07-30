@@ -4,7 +4,7 @@ Plugin Name: UI Labs
 Plugin URI: http://halfelf.org/plugins/ui-labs/
 Description: Experimental WordPress admin UI features, ooo shiny!
 Author: John O'Nolan, Mika A Epstein
-Version: 3.0
+Version: 3.0.1
 Author URI: http://halfelf.org
 License: GPL-2.0+
 License URI: http://www.opensource.org/licenses/gpl-license.php
@@ -18,7 +18,7 @@ Network: True
  */
 
 class UI_Labs {
-	
+
 	/*
 	 * Starter defines and vars for use later
 	 *
@@ -28,7 +28,7 @@ class UI_Labs {
 	// Holds option data.
     var $option_name = 'uilabs_options';
     var $option_defaults;
-    
+
     // DB version, for schema upgrades.
     var $db_version = 3;
 
@@ -42,7 +42,7 @@ class UI_Labs {
      * @since 2.0
      */
     function __construct() {
-	    
+
 	    //allow this instance to be called from outside the class
         self::$instance = $this;
 
@@ -74,20 +74,24 @@ class UI_Labs {
 
 	    // check if DB needs to be upgraded (this will merge old settings to new)
 	    $naked_options = get_site_option( $this->option_name );
-	    $single_options = get_blog_option( BLOG_ID_CURRENT_SITE, $this->option_name );
-	    
-	    if ( !isset( $naked_options['db_version'] ) || $naked_options['db_version'] < $this->db_version || $single_options['db_version'] < $this->db_version ) {
-		    
+	    if ( is_multisite() ) {
+	    	$single_options = get_blog_option( BLOG_ID_CURRENT_SITE, $this->option_name );
+	    } else {
+		    $single_options = FALSE;
+	    }
+
+	    if ( !isset( $naked_options['db_version'] ) || $naked_options['db_version'] < $this->db_version || ( $single_options !== FALSE && $single_options['db_version'] < $this->db_version ) ) {
+
 		    if ( $single_options['db_version'] < $this->db_version ) {
 			    $current_db_version = $single_options['db_version'];
 		    } else {
 			    $current_db_version = isset( $naked_options['db_version'] ) ? $naked_options['db_version'] : 0;
 		    }
-	        
+
 	        //run upgrade and store new version #
 	        $this->upgrade( $current_db_version );
 	    }
-	 
+
 	}
 
 	/**
@@ -99,7 +103,7 @@ class UI_Labs {
 		// Add link to settings from plugins listing page
 		$plugin = plugin_basename(__FILE__);
 		add_filter("plugin_action_links_$plugin", array( &$this, 'add_settings_link' ) );
-	    
+
 	    // Register Settings
 		$this->register_settings();
 	}
@@ -118,25 +122,25 @@ class UI_Labs {
 	        $this->options['identity'] = get_option('identity');
 	        $this->options['servertype'] = get_option('servertype');
 	        	$this->options['db_version'] = '1';
-	        
+
 	        // Delete old options
 	        delete_option( 'poststatuses' );
 	        delete_option( 'adminbar' );
 	        delete_option( 'identity' );
 	        delete_option( 'servertype' );
-	    } 
-	    
+	    }
+
 	    if ( $current_db_version < 3 ) {
 		    if ( is_multisite() ) {
 			    $mainoptions = get_blog_option( BLOG_ID_CURRENT_SITE, $this->option_name );
 			    $mainoptions['db_version'] = '3';
 			    update_blog_option( BLOG_ID_CURRENT_SITE, $this->option_name, $mainoptions );
 			    $this->options = $mainoptions;
-		    } 
+		    }
 			$this->options['footer'] = $this->options['toolbar'];
 			$this->options['db_version'] = '3';
 		}
-		
+
 		update_site_option( $this->option_name, $this->options );
     }
 
@@ -167,14 +171,14 @@ class UI_Labs {
 
 	function network_admin_screen() {
 	    $current_screen = get_current_screen();
-	
+
 	    if( $current_screen->id === "settings_page_ui-labs-network-settings-network" ) {
-	
+
 	        	if ( isset($_POST['update'] ) && check_admin_referer( 'uilabs_networksave') ) {
-				
+
 			$options = $this->options;
 			$input = $_POST['uilabs_options'];
-			
+
 			foreach ( $options as $key=>$value ) {
 		       if ( !isset($input[$key]) || is_null( $input[$key] ) || $input[$key] == '0' ) {
 			        $output[$key] = 'no';
@@ -182,31 +186,31 @@ class UI_Labs {
 			        $output[$key] = sanitize_text_field($input[$key]);
 		        }
 			}
-			
+
 			$output['db_version'] = $this->db_version;
 			$this->options = $output;
-			
+
 			update_site_option( $this->option_name , $output );
 			?><div class="notice notice-success is-dismissible"><p><strong><?php _e('Options Updated!', 'ui-labs'); ?></strong></p></div><?php
 			}
 	    }
-	    
+
 		// Allows experiments to be turned on/off, written by Ollie Read
-		
+
 		// Post Statuses
 		if( $this->options['poststatuses'] == 'yes') {
 			add_filter( 'display_post_states', array( &$this, 'display_post_states') );
 			wp_register_style('ui-labs-poststatuses', plugins_url('css/poststatuses.css', __FILE__), false, '9001');
 			wp_enqueue_style('ui-labs-poststatuses');
 		}
-		
+
 		// Show Plugin Age
 		if( ( $this->options['pluginage'] == 'yes' || $this->options['pluginage'] == 'all' ) || ( $this->options['pluginage'] !== 'no' && is_network_admin() ) ) {
 			wp_register_style('ui-labs-pluginage', plugins_url('css/pluginage.css', __FILE__), false, '9001');
 			wp_enqueue_style('ui-labs-pluginage');
 			add_action( 'after_plugin_row', array( &$this, 'pluginage_row'), 10, 2 );
 		}
-		
+
 		// Change toolbar padding
 		if( $this->options['toolbar'] == 'yes' ) {
 			wp_register_style('ui-labs-toolbar', plugins_url('css/toolbar.css', __FILE__), false, '9001');
@@ -218,19 +222,19 @@ class UI_Labs {
 			wp_register_style('ui-labs-footer', plugins_url('css/footer.css', __FILE__), false, '9001');
 			wp_enqueue_style('ui-labs-footer');
 		}
-				
+
 		// Make dashboard bigger fonts
 		if( $this->options['dashboard'] == 'yes' ) {
 			wp_register_style('ui-labs-dashboard', plugins_url('css/dashboard.css', __FILE__), false, '9001');
 			wp_enqueue_style('ui-labs-dashboard');
 		}
-		
+
 		// Identify server
 		if( $this->options['identity'] == 'yes' ) {
 			wp_register_style('ui-labs-identity', plugins_url('css/identity.css', __FILE__), false, '9001');
 			wp_enqueue_style('ui-labs-identity');
 		}
-		
+
 		// Filter for the admin body class
 		add_filter('admin_body_class', array( &$this, 'admin_body_class') );
 
@@ -367,19 +371,19 @@ class UI_Labs {
 	 * Call settings page
 	 *
 	 * @since 1.0
-	 */	
-	function uilabs_settings() { 
+	 */
+	function uilabs_settings() {
 		?>
 
 		<div class="wrap">
-			
+
 		<h1><?php _e( 'UI Labs', 'ui-labs' ); ?></h1>
-		
+
 		<?php settings_errors();
-		
+
 		if ( is_network_admin() ) {
 			?><form method="post" width='1'><?php
-				wp_nonce_field( 'uilabs_networksave' ); 
+				wp_nonce_field( 'uilabs_networksave' );
 		} else {
 			?><form action="options.php" method="POST" ><?php
 				settings_fields('ui-labs');
@@ -400,7 +404,7 @@ class UI_Labs {
 	 * @since 2.0
 	 */
 	function uilabs_sanitize( $input ) {
-		
+
 		$options = $this->options;
 
     		$input['db_version'] = $this->db_version;
@@ -425,7 +429,7 @@ class UI_Labs {
 	 *
 	 * @since 1.0.1
 	 */
-	function display_post_states( $post_states ) {		
+	function display_post_states( $post_states ) {
 		$post_state_array = array();
 		foreach ( $post_states as $post_state => $post_state_title )
 			$post_state_array[] = '<span class="' . strtolower( str_replace( ' ', '-', $post_state ) ) . '">' . $post_state_title . '</span>';
@@ -449,7 +453,7 @@ class UI_Labs {
 
 		$lastupdated = strtotime( $this->pluginage_get_last_updated( $plugin_data['slug'] ) ) ;
 		$twoyears    = strtotime('-2 years');
-		
+
 		if ( $lastupdated >= $twoyears ) {
 			return false;
 		}
@@ -458,7 +462,7 @@ class UI_Labs {
 		$plugin_name = wp_kses( $plugin_data['Name'], $plugins_allowedtags );
 
 		$wp_list_table = _get_list_table('WP_Plugins_List_Table');
-		
+
 		if ( is_network_admin() || !is_multisite() ) {
 			if ( is_network_admin() ) {
 				$active_class = is_plugin_active_for_network( $file ) ? ' active': '';
@@ -481,7 +485,7 @@ class UI_Labs {
 	 */
 	function pluginage_get_last_updated( $slug ) {
 
-		// Bail early - If there's no slug, then this plugin is screwy and should be skipped. 
+		// Bail early - If there's no slug, then this plugin is screwy and should be skipped.
 		// Return an empty but CACHABLE response.
 		if ( !isset($slug) ) {
 			return '';
@@ -501,14 +505,14 @@ class UI_Labs {
 				)
 			)
 		);
-		
+
 		if ( 200 != wp_remote_retrieve_response_code( $request ) || empty( $request ) ) {
 			// If there's no response, return with a cacheable response
 			return '';
 		} else {
 			$response = unserialize( wp_remote_retrieve_body( $request ) );
 		}
-		
+
 		if ( isset( $response->last_updated ) ) {
 			return sanitize_text_field( $response->last_updated );
 		} else {

@@ -79,9 +79,12 @@ The original author spelled it that way, being from a place where that was how i
 
 = 3.0.2 (2016-08) =
 * Optimized: Lab checks run a little faster now and in the right places.
+* Fixed: Some checks not running on single site.
+* Fixed: Settings link on Plugin List Page.
+* Added: Donate link on Plugin List Page.
 
 = 3.0.1 (2016-07) =
-* Fixed: Failure to check `is_multisite` properly which broke single site. SO so sory.r
+* Fixed: Failure to check `is_multisite` properly which broke single site. SO so sorry.
 
 = 3.0 (2016-07) =
 * Separated: Footer and padding

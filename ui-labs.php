@@ -102,7 +102,8 @@ class UI_Labs {
     function admin_init() {
 		// Add link to settings from plugins listing page
 		$plugin = plugin_basename(__FILE__);
-		add_filter("plugin_action_links_$plugin", array( &$this, 'add_settings_link' ) );
+		add_filter( "plugin_action_links_$plugin", array( &$this, 'add_settings_link' ) );
+		add_filter( "plugin_row_meta", array( &$this, 'donate_link' ), 10, 2);
 
 	    // Register Settings
 		$this->register_settings();
@@ -538,13 +539,27 @@ class UI_Labs {
 	 *
 	 * @since 2.0
 	 */
-	function add_settings_link( $links, $file ) {
-		if ( plugin_basename( __FILE__ ) == $file ) {
-			$settings_link = '<a href="' . admin_url( 'tools.php?page=ui-labs-settings' ) .'">' . __( 'Settings', 'ui-labs' ) . '</a>';
-			array_unshift( $links, $settings_link );
+	function add_settings_link( $links ) {
+		$settings_link = '<a href="' . admin_url( 'tools.php?page=ui-labs-settings' ) .'">' . __( 'Settings', 'ui-labs' ) . '</a>';
+		array_unshift( $links, $settings_link );
+		return $links;
+	}
+
+	/**
+	 * Add Donate link on plugin
+	 *
+	 * @since 3.0.2
+	 */
+
+	// donate link on manage plugin page
+	function donate_link($links, $file) {
+		if ($file == plugin_basename(__FILE__)) {
+			$donate_link = '<a href="https://store.halfelf.org/donate/">' . __( 'Donate', 'wp-grins-ssl' ) . '</a>';
+			$links[] = $donate_link;
 		}
 		return $links;
 	}
+
 }
 
 new UI_Labs();

@@ -2,7 +2,7 @@
 Contributors: JohnONolan, Ipstenu
 Tags: ui, admin design, experimental
 Requires at least: 4.0
-Tested up to: 4.8
+Tested up to: 4.9
 Stable tag: 3.0.3
 License: GPLv2 or later
 

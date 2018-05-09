@@ -26,25 +26,25 @@ class UI_Labs {
 	 */
 
 	// Holds option data.
-    var $option_name = 'uilabs_options';
-    var $option_defaults;
+	var $option_name = 'uilabs_options';
+	var $option_defaults;
 
-    // DB version, for schema upgrades.
-    var $db_version = 3;
+	// DB version, for schema upgrades.
+	var $db_version = 3;
 
 	// Instance
 	static $instance;
 
-    /**
-     * Construct
-     * Fires when class is constructed, adds init hook
-     *
-     * @since 2.0
-     */
-    function __construct() {
+	/**
+	 * Construct
+	 * Fires when class is constructed, adds init hook
+	 *
+	 * @since 2.0
+	 */
+	function __construct() {
 
-	    //allow this instance to be called from outside the class
-        self::$instance = $this;
+		//allow this instance to be called from outside the class
+		self::$instance = $this;
 
 		//add admin init hooks
 		add_action( 'admin_init', array( &$this, 'admin_init' ) );
@@ -57,40 +57,40 @@ class UI_Labs {
 			add_action( 'admin_menu', array( &$this, 'admin_menu' ) );
 		}
 
-    		// Setting plugin defaults here:
+			// Setting plugin defaults here:
 		$this->option_defaults = array(
-			'poststatuses'	=> 'yes',
-			'pluginage' 		=> 'no',
-	        'toolbar' 		=> 'no',
-	        'dashboard' 		=> 'no',
-	        'identity' 		=> 'no',
-	        'footer'			=> 'no',
-	        'servertype' 	=> 'uilabs-blank',
-	        'db_version' 	=> $this->db_version,
-	    );
+			'poststatuses' => 'yes',
+			'pluginage'    => 'no',
+			'toolbar'      => 'no',
+			'dashboard'    => 'no',
+			'identity'     => 'no',
+			'footer'       => 'no',
+			'servertype'   => 'uilabs-blank',
+			'db_version'   => $this->db_version,
+		);
 
-        // Fetch and set up options.
-	    $this->options = wp_parse_args( get_site_option( $this->option_name ), $this->option_defaults );
+		// Fetch and set up options.
+		$this->options = wp_parse_args( get_site_option( $this->option_name ), $this->option_defaults );
 
-	    // check if DB needs to be upgraded (this will merge old settings to new)
-	    $naked_options = get_site_option( $this->option_name );
-	    if ( is_multisite() ) {
-	    	$single_options = get_blog_option( BLOG_ID_CURRENT_SITE, $this->option_name );
-	    } else {
-		    $single_options = FALSE;
-	    }
+		// check if DB needs to be upgraded (this will merge old settings to new)
+		$naked_options = get_site_option( $this->option_name );
+		if ( is_multisite() ) {
+			$single_options = get_blog_option( BLOG_ID_CURRENT_SITE, $this->option_name );
+		} else {
+			$single_options = FALSE;
+		}
 
-	    if ( !isset( $naked_options['db_version'] ) || $naked_options['db_version'] < $this->db_version || ( $single_options !== FALSE && $single_options['db_version'] < $this->db_version ) ) {
+		if ( !isset( $naked_options['db_version'] ) || $naked_options['db_version'] < $this->db_version || ( $single_options !== FALSE && $single_options['db_version'] < $this->db_version ) ) {
 
-		    if ( $single_options['db_version'] < $this->db_version ) {
-			    $current_db_version = $single_options['db_version'];
-		    } else {
-			    $current_db_version = isset( $naked_options['db_version'] ) ? $naked_options['db_version'] : 0;
-		    }
+			if ( $single_options['db_version'] < $this->db_version ) {
+				$current_db_version = $single_options['db_version'];
+			} else {
+				$current_db_version = isset( $naked_options['db_version'] ) ? $naked_options['db_version'] : 0;
+			}
 
-	        //run upgrade and store new version #
-	        $this->upgrade( $current_db_version );
-	    }
+			//run upgrade and store new version #
+			$this->upgrade( $current_db_version );
+		}
 
 	}
 
@@ -99,13 +99,13 @@ class UI_Labs {
 	 *
 	 * @since 2.0
 	 */
-    function admin_init() {
+	function admin_init() {
 		// Add link to settings from plugins listing page
 		$plugin = plugin_basename(__FILE__);
 		add_filter( "plugin_action_links_$plugin", array( &$this, 'add_settings_link' ) );
 		add_filter( "plugin_row_meta", array( &$this, 'donate_link' ), 10, 2);
 
-	    // Register Settings
+		// Register Settings
 		$this->register_settings();
 
 		// Allows experiments to be turned on/off, written by Ollie Read
@@ -152,48 +152,48 @@ class UI_Labs {
 		add_filter('admin_body_class', array( &$this, 'admin_body_class') );
 	}
 
-    /**
+	/**
 	 * Upgrades Database
 	 *
 	 * @param int $current_db_version the current DB version
 	 * @since 2.0
 	 */
 	function upgrade( $current_db_version ) {
-	    if ( $current_db_version < 1 ) {
-		    // Migrate old options to new
-	        $this->options['poststatuses'] = get_option('poststatuses');
-	        $this->options['toolbar'] = get_option('adminbar');
-	        $this->options['identity'] = get_option('identity');
-	        $this->options['servertype'] = get_option('servertype');
-	        	$this->options['db_version'] = '1';
+		if ( $current_db_version < 1 ) {
+			// Migrate old options to new
+			$this->options['poststatuses'] = get_option('poststatuses');
+			$this->options['toolbar'] = get_option('adminbar');
+			$this->options['identity'] = get_option('identity');
+			$this->options['servertype'] = get_option('servertype');
+				$this->options['db_version'] = '1';
 
-	        // Delete old options
-	        delete_option( 'poststatuses' );
-	        delete_option( 'adminbar' );
-	        delete_option( 'identity' );
-	        delete_option( 'servertype' );
-	    }
+			// Delete old options
+			delete_option( 'poststatuses' );
+			delete_option( 'adminbar' );
+			delete_option( 'identity' );
+			delete_option( 'servertype' );
+		}
 
-	    if ( $current_db_version < 3 ) {
-		    if ( is_multisite() ) {
-			    $mainoptions = get_blog_option( BLOG_ID_CURRENT_SITE, $this->option_name );
-			    $mainoptions['db_version'] = '3';
-			    update_blog_option( BLOG_ID_CURRENT_SITE, $this->option_name, $mainoptions );
-			    $this->options = $mainoptions;
-		    }
+		if ( $current_db_version < 3 ) {
+			if ( is_multisite() ) {
+				$mainoptions = get_blog_option( BLOG_ID_CURRENT_SITE, $this->option_name );
+				$mainoptions['db_version'] = '3';
+				update_blog_option( BLOG_ID_CURRENT_SITE, $this->option_name, $mainoptions );
+				$this->options = $mainoptions;
+			}
 			$this->options['footer'] = $this->options['toolbar'];
 			$this->options['db_version'] = '3';
 		}
 
 		update_site_option( $this->option_name, $this->options );
-    }
+	}
 
 	/**
 	 * Admin Menu Callback
 	 *
 	 * @since 2.0
 	 */
-    function admin_menu() {
+	function admin_menu() {
 		// Add settings page on Tools
 		add_management_page( __('UI Labs', 'ui-labs'), __('UI Labs', 'ui-labs'), 'manage_options', 'ui-labs-settings', array( &$this, 'uilabs_settings' ) );
 	}
@@ -203,7 +203,7 @@ class UI_Labs {
 	 *
 	 * @since 3.0
 	 */
-    function network_admin_menu() {
+	function network_admin_menu() {
 		add_submenu_page( 'settings.php', __('UI Labs', 'ui-labs'), __('UI Labs', 'ui-labs'), 'manage_options', 'ui-labs-network-settings', array( &$this, 'uilabs_settings' ) );
 	}
 
@@ -214,21 +214,21 @@ class UI_Labs {
 	 */
 
 	function network_admin_screen() {
-	    $current_screen = get_current_screen();
+		$current_screen = get_current_screen();
 
-	    if( $current_screen->id === "settings_page_ui-labs-network-settings-network" ) {
+		if( $current_screen->id === "settings_page_ui-labs-network-settings-network" ) {
 
-	        	if ( isset($_POST['update'] ) && check_admin_referer( 'uilabs_networksave') ) {
+				if ( isset($_POST['update'] ) && check_admin_referer( 'uilabs_networksave') ) {
 
 			$options = $this->options;
 			$input = $_POST['uilabs_options'];
 
 			foreach ( $options as $key=>$value ) {
-		       if ( !isset($input[$key]) || is_null( $input[$key] ) || $input[$key] == '0' ) {
-			        $output[$key] = 'no';
-		        } else {
-			        $output[$key] = sanitize_text_field($input[$key]);
-		        }
+				if ( !isset($input[$key]) || is_null( $input[$key] ) || $input[$key] == '0' ) {
+					$output[$key] = 'no';
+				} else {
+					$output[$key] = sanitize_text_field($input[$key]);
+				}
 			}
 
 			$output['db_version'] = $this->db_version;
@@ -237,7 +237,7 @@ class UI_Labs {
 			update_site_option( $this->option_name , $output );
 			?><div class="notice notice-success is-dismissible"><p><strong><?php _e('Options Updated!', 'ui-labs'); ?></strong></p></div><?php
 			}
-	    }
+		}
 	}
 
 	/**
@@ -245,8 +245,8 @@ class UI_Labs {
 	 *
 	 * @since 2.0
 	 */
-    function register_settings() {
-	    register_setting( 'ui-labs', 'uilabs_options', array( &$this, 'uilabs_sanitize' ) );
+	function register_settings() {
+		register_setting( 'ui-labs', 'uilabs_options', array( &$this, 'uilabs_sanitize' ) );
 
 		// The main section
 		add_settings_section( 'uilabs-experiments', __('Experiments to make your site cooler', 'ui-labs'), array( &$this, 'uilabs_experiments_callback'), 'ui-labs-settings' );
@@ -266,9 +266,9 @@ class UI_Labs {
 	 * @since 2.0
 	 */
 	function uilabs_experiments_callback() {
-	    ?>
-	    <p><?php _e('To activate an experiment, click the checkbox and save your settings.', 'ui-labs'); ?></p>
-	    <?php
+		?>
+		<p><?php _e('To activate an experiment, click the checkbox and save your settings.', 'ui-labs'); ?></p>
+		<?php
 	}
 
 	/**
@@ -315,7 +315,7 @@ class UI_Labs {
 		?>
 		<input type="checkbox" id="uilabs_options[toolbar]" name="uilabs_options[toolbar]" value="yes" <?php echo checked( $this->options['toolbar'], 'yes', true ); ?> >
 		<label for="uilabs_options[toolbar]"><?php _e('Add spacing and padding to the toolbar.', 'ui-labs'); ?></label>
-	    <?php
+		<?php
 	}
 
 	/**
@@ -327,7 +327,7 @@ class UI_Labs {
 		?>
 		<input type="checkbox" id="uilabs_options[footer]" name="uilabs_options[footer]" value="yes" <?php echo checked( $this->options['footer'], 'yes', true ); ?> >
 		<label for="uilabs_options[footer]"><?php _e('Restore a 3.2-esque admin footer.', 'ui-labs'); ?></label>
-	    <?php
+		<?php
 	}
 
 	/**
@@ -339,7 +339,7 @@ class UI_Labs {
 		?>
 		<input type="checkbox" id="uilabs_options[dashboard]" name="uilabs_options[dashboard]" value="yes" <?php checked( $this->options['dashboard'], 'yes', true ); ?> >
 		<label for="uilabs_options[dashboard]"><?php _e('Increase the font size in the admin dashboard.', 'ui-labs'); ?></label>
-	    <?php
+		<?php
 	}
 
 	/**
@@ -389,9 +389,9 @@ class UI_Labs {
 				settings_fields('ui-labs');
 		}
 
-			    do_settings_sections( 'ui-labs-settings' );
-			    submit_button( '', 'primary', 'update');
-		    ?>
+				do_settings_sections( 'ui-labs-settings' );
+				submit_button( '', 'primary', 'update');
+			?>
 			</form>
 		</div>
 		<?php
@@ -407,15 +407,15 @@ class UI_Labs {
 
 		$options = $this->options;
 
-    		$input['db_version'] = $this->db_version;
+			$input['db_version'] = $this->db_version;
 
 		foreach ($options as $key=>$value) {
-            if ( !isset($input[$key]) || is_null( $input[$key] ) || $input[$key] == '0' ) {
-	            $output[$key] = 'no';
-            } else {
-	            $output[$key] = sanitize_text_field($input[$key]);
-            }
-        }
+			if ( !isset($input[$key]) || is_null( $input[$key] ) || $input[$key] == '0' ) {
+				$output[$key] = 'no';
+			} else {
+				$output[$key] = sanitize_text_field($input[$key]);
+			}
+		}
 
 		return $output;
 	}
@@ -433,7 +433,7 @@ class UI_Labs {
 		$post_state_array = array();
 		foreach ( $post_states as $post_state => $post_state_title )
 			$post_state_array[] = '<span class="' . strtolower( str_replace( ' ', '-', $post_state ) ) . '">' . $post_state_title . '</span>';
-	   return $post_state_array;
+		return $post_state_array;
 	}
 
 	/**
@@ -554,7 +554,7 @@ class UI_Labs {
 	// donate link on manage plugin page
 	function donate_link($links, $file) {
 		if ($file == plugin_basename(__FILE__)) {
-			$donate_link = '<a href="https://ko-fi.com/A236CENl/">' . __( 'Donate', 'wp-grins-ssl' ) . '</a>';
+			$donate_link = '<a href="https://ko-fi.com/A236CEN/">' . __( 'Donate', 'wp-grins-ssl' ) . '</a>';
 			$links[] = $donate_link;
 		}
 		return $links;

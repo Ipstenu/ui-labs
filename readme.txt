@@ -5,6 +5,7 @@ Requires at least: 4.0
 Tested up to: 4.9
 Stable tag: 3.0.3
 License: GPLv2 or later
+Donate link: https://ko-fi.com/A236CEN/
 
 Experimental WordPress admin UI features, shiny ones.
 
@@ -16,7 +17,7 @@ These experiments are limited by their very nature and are mostly small tweaks v
 
 While using WordPress Multisite, the options are only configurable via the Network Admin. Yes, this means it's for all sites.
 
-= Features =
+=== Features ===
 
 Each experiment can be turned on and off from the plugin settings screen under TOOLS.
 
@@ -43,6 +44,10 @@ Small fonts hurt. This will bump the default font sizes for those of us who need
 <strong>Identify This Server</strong>
 
 Sometimes, when developing sites locally, deploying them to a staging server, then deploying to a live server - it can become confusing as to which WordPress admin panel you're logged into. This can have disastrous consequences if you suddenly start deleting stuff on the live server cause you thought the current tab was the staging server. This allows you to enable colour coding for your different servers so that it's always obvious which one you're using right now.
+
+=== Privacy Notes ===
+
+No data is tracked by this plugin, nor is any additional user data stored.
 
 == Installation ==
 

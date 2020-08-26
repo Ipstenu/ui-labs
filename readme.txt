@@ -1,9 +1,9 @@
 === UI Labs ===
 Contributors: JohnONolan, Ipstenu
 Tags: ui, admin design, experimental
-Requires at least: 4.0
-Tested up to: 5.4
-Stable tag: 3.0.3
+Requires at least: 5.5
+Tested up to: 5.5
+Stable tag: 4.0
 License: GPLv2 or later
 Donate link: https://ko-fi.com/A236CEN/
 
@@ -64,42 +64,37 @@ No special instructions.
 
 == FAQ ==
 
+<strong>How do I change the server environment type?</strong>
+
+You change it via the `WP_ENVIRONMENT_TYPE` define (introduced in WP 5.5).
+
+Adding this to your `wp-config.php` will turn your site into a staging site:
+`define( 'WP_ENVIRONMENT_TYPE', 'staging' );`
+
+Currently only the default environments are supported.
+
 <strong>Will you add X?</strong>
 
-Maybe. It really depends.
+Maybe. It really depends on the value and potential usage.
 
 <strong>Why is my site slow when I turn on Old Plugin Warning?</strong>
 
-In general, this happens if you have plugins hosted off of WordPress.org that do funny things with the check for updates. Basically they trigger it too many times, and in a way that kicks off this plugin. This should only slow down the plugin check.
+This happens if you have plugins hosted off of WordPress.org that do funny things with the check for updates. Basically they trigger the updater too many times, and in a way that kicks off this plugin. This should only slow down the plugin listing page, however, and no other pages.
 
 <strong>Why are the settings only editable by the Network Admin on Multisite?</strong>
 
-Because Multisite.
-
-<strong>Why is it spelled 'Colour'?</strong>
-
-The original author spelled it that way, being from a place where that was how it's spelled. I don't change it out of respect for John. Besides, it adds flavour.
+Because Multisite is a special thing.
 
 == Changelog ==
 
-= 3.0.3 (2016-08) =
-* Fixed: CSS padding for post status on wrapped lines.
-
-= 3.0.2 (2016-08) =
-* Optimized: Lab checks run a little faster now and in the right places.
-* Fixed: Some checks not running on single site.
-* Fixed: Settings link on Plugin List Page.
-* Added: Donate link on Plugin List Page.
-
-= 3.0.1 (2016-07) =
-* Fixed: Failure to check `is_multisite` properly which broke single site. SO so sorry.
-
-= 3.0 (2016-07) =
-* Separated: Footer and padding
-* Added: Multisite Support
+= 4.0 (2020-08) =
+* Added: Support for WordPress default environment types.
+* PHPCS cleanup
 
 (See Changelog.txt for older revisions)
 
-== Update Notice ==
+== Upgrade Notice ==
 
-If you're on Multisite, things were moved. All your main site settings were imported to network defaults.
+= 4.0 =
+
+Updated environment types to be based on the `WP_ENVIRONMENT_TYPE` define.

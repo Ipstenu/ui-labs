@@ -1,3 +1,19 @@
+= 3.0.3 (2016-08) =
+* Fixed: CSS padding for post status on wrapped lines.
+
+= 3.0.2 (2016-08) =
+* Optimized: Lab checks run a little faster now and in the right places.
+* Fixed: Some checks not running on single site.
+* Fixed: Settings link on Plugin List Page.
+* Added: Donate link on Plugin List Page.
+
+= 3.0.1 (2016-07) =
+* Fixed: Failure to check `is_multisite` properly which broke single site. SO so sorry.
+
+= 3.0 (2016-07) =
+* Separated: Footer and padding
+* Added: Multisite Support
+
 = 2.2.4 (2016-06-06) =
 * Changed: Made plugin age more cacheable.
 

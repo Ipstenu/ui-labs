@@ -2,7 +2,7 @@
 Contributors: JohnONolan, Ipstenu
 Tags: ui, admin design, experimental
 Requires at least: 5.5
-Tested up to: 5.5
+Tested up to: 5.6
 Stable tag: 4.0
 License: GPLv2 or later
 Donate link: https://ko-fi.com/A236CEN/

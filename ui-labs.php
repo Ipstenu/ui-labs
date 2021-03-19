@@ -4,7 +4,7 @@ Plugin Name: UI Labs
 Plugin URI: http://halfelf.org/plugins/ui-labs/
 Description: Experimental WordPress admin UI features, ooo shiny!
 Author: John O'Nolan, Mika A Epstein
-Version: 4.0
+Version: 4.0.1
 Author URI: http://halfelf.org
 License: GPL-2.0+
 License URI: http://www.opensource.org/licenses/gpl-license.php
@@ -28,6 +28,9 @@ class UI_Labs {
 	// Holds option data.
 	public $option_name = 'uilabs_options';
 	public $option_defaults;
+
+	// Plugin version
+	public $plugin_version = '4.0.1';
 
 	// DB version, for schema upgrades.
 	public $db_version = 4;
@@ -116,38 +119,38 @@ class UI_Labs {
 		// Post Statuses
 		if ( 'yes' === $this->options['poststatuses'] ) {
 			add_filter( 'display_post_states', array( &$this, 'display_post_states' ) );
-			wp_register_style( 'ui-labs-poststatuses', plugins_url( 'css/poststatuses.css', __FILE__ ), false, '9001' );
+			wp_register_style( 'ui-labs-poststatuses', plugins_url( 'css/poststatuses.css', __FILE__ ), false, '$this->plugin_version' );
 			wp_enqueue_style( 'ui-labs-poststatuses' );
 		}
 
 		// Show Plugin Age
 		if ( ( 'yes' === $this->options['pluginage'] || 'all' === $this->options['pluginage'] ) || ( 'no' !== $this->options['pluginage'] && is_network_admin() ) ) {
-			wp_register_style( 'ui-labs-pluginage', plugins_url( 'css/pluginage.css', __FILE__ ), false, '9001' );
+			wp_register_style( 'ui-labs-pluginage', plugins_url( 'css/pluginage.css', __FILE__ ), false, '$this->plugin_version' );
 			wp_enqueue_style( 'ui-labs-pluginage' );
 			add_action( 'after_plugin_row', array( &$this, 'pluginage_row' ), 10, 2 );
 		}
 
 		// Change toolbar padding
 		if ( 'yes' === $this->options['toolbar'] ) {
-			wp_register_style( 'ui-labs-toolbar', plugins_url( 'css/toolbar.css', __FILE__ ), false, '9001' );
+			wp_register_style( 'ui-labs-toolbar', plugins_url( 'css/toolbar.css', __FILE__ ), false, '$this->plugin_version' );
 			wp_enqueue_style( 'ui-labs-toolbar' );
 		}
 
 		// Change footer
 		if ( 'yes' === $this->options['footer'] ) {
-			wp_register_style( 'ui-labs-footer', plugins_url( 'css/footer.css', __FILE__ ), false, '9001' );
+			wp_register_style( 'ui-labs-footer', plugins_url( 'css/footer.css', __FILE__ ), false, '$this->plugin_version' );
 			wp_enqueue_style( 'ui-labs-footer' );
 		}
 
 		// Make dashboard bigger fonts
 		if ( 'yes' === $this->options['dashboard'] ) {
-			wp_register_style( 'ui-labs-dashboard', plugins_url( 'css/dashboard.css', __FILE__ ), false, '9001' );
+			wp_register_style( 'ui-labs-dashboard', plugins_url( 'css/dashboard.css', __FILE__ ), false, '$this->plugin_version' );
 			wp_enqueue_style( 'ui-labs-dashboard' );
 		}
 
 		// Identify server
 		if ( 'yes' === $this->options['identity'] ) {
-			wp_register_style( 'ui-labs-identity', plugins_url( 'css/identity.css', __FILE__ ), false, '9001' );
+			wp_register_style( 'ui-labs-identity', plugins_url( 'css/identity.css', __FILE__ ), false, '$this->plugin_version' );
 			wp_enqueue_style( 'ui-labs-identity' );
 		}
 

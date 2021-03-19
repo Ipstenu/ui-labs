@@ -2,12 +2,12 @@
 Contributors: JohnONolan, Ipstenu
 Tags: ui, admin design, experimental
 Requires at least: 5.5
-Tested up to: 5.6
-Stable tag: 4.0
+Tested up to: 5.7
+Stable tag: 4.0.1
 License: GPLv2 or later
 Donate link: https://ko-fi.com/A236CEN/
 
-Experimental WordPress admin UI features, shiny ones.
+Experimental WordPress admin UI features.
 
 == Description ==
 
@@ -86,6 +86,9 @@ This happens if you have plugins hosted off of WordPress.org that do funny thing
 Because Multisite is a special thing.
 
 == Changelog ==
+
+= 4.0.1 (2021-03) =
+* Updated CSS to match new [colour standards in WP](https://make.wordpress.org/core/2021/02/23/standardization-of-wp-admin-colors-in-wordpress-5-7/)
 
 = 4.0 (2020-08) =
 * Added: Support for WordPress default environment types.

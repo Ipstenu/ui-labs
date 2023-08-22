@@ -3,7 +3,7 @@ Contributors: JohnONolan, Ipstenu
 Tags: ui, admin design, experimental
 Requires at least: 5.5
 Tested up to: 6.3
-Stable tag: 4.0.1
+Stable tag: 4.0.2
 License: GPLv2 or later
 Donate link: https://ko-fi.com/A236CEN/
 
@@ -86,6 +86,9 @@ This happens if you have plugins hosted off of WordPress.org that do funny thing
 Because Multisite is a special thing.
 
 == Changelog ==
+
+= 4.0.2 (2023-08) =
+* PHP 8.2 support
 
 = 4.0.1 (2021-03) =
 * Updated CSS to match new [colour standards in WP](https://make.wordpress.org/core/2021/02/23/standardization-of-wp-admin-colors-in-wordpress-5-7/)

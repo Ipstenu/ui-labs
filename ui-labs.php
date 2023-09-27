@@ -75,7 +75,6 @@ class UI_Labs {
 			'dashboard'    => 'no',
 			'identity'     => 'no',
 			'footer'       => 'no',
-			'db_version'   => $this->db_version,
 		);
 
 		// Fetch and set up options.

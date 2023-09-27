@@ -2,7 +2,7 @@
 Contributors: JohnONolan, Ipstenu
 Tags: ui, admin design, experimental
 Requires at least: 5.5
-Tested up to: 6.3
+Tested up to: 6.4
 Stable tag: 4.0.2
 License: GPLv2 or later
 Donate link: https://ko-fi.com/A236CEN/
@@ -66,12 +66,14 @@ No special instructions.
 
 <strong>How do I change the server environment type?</strong>
 
-You change it via the `WP_ENVIRONMENT_TYPE` define (introduced in WP 5.5).
+You change it via the `WP_ENVIRONMENT_TYPE` define (<a href="https://make.wordpress.org/core/2020/07/24/new-wp_get_environment_type-function-in-wordpress-5-5/">introduced in WP 5.5</a>).
 
 Adding this to your `wp-config.php` will turn your site into a staging site:
 `define( 'WP_ENVIRONMENT_TYPE', 'staging' );`
 
-Currently only the default environments are supported.
+<strong>Why does my site show as in 'development' mode if I didn't define the environment type?</strong>
+
+That means you set `WP_DEVELOPMENT_MODE` (<a href="https://make.wordpress.org/core/2023/07/14/configuring-development-mode-in-6-3/">introduced in WP 6.3</a>) to something other than empty. That tells WordPress you're in Development mode, and the plugin respects that.
 
 <strong>Will you add X?</strong>
 
@@ -83,12 +85,14 @@ This happens if you have plugins hosted off of WordPress.org that do funny thing
 
 <strong>Why are the settings only editable by the Network Admin on Multisite?</strong>
 
-Because Multisite is a special thing.
+Because Multisite is a special creature.
 
 == Changelog ==
 
-= 4.0.2 (2023-08) =
+= 4.0.2 (2023-09) =
 * PHP 8.2 support
+* WP 6.4 support
+* Support for `WP_DEVELOPMENT_MODE`
 
 = 4.0.1 (2021-03) =
 * Updated CSS to match new [colour standards in WP](https://make.wordpress.org/core/2021/02/23/standardization-of-wp-admin-colors-in-wordpress-5-7/)

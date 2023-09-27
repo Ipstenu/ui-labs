@@ -59,8 +59,11 @@ class UI_Labs {
 		}
 
 		// If the new environment type is being used, we use it.
+		// If the type isn't use, but development mode is, we're on dev.
 		if ( function_exists( 'wp_get_environment_type' ) && ! empty( wp_get_environment_type() ) ) {
 			$this->default_env_type = 'uilabs-' . wp_get_environment_type();
+		} elseif ( function_exists( 'wp_get_development_mode' ) && ! empty( wp_get_development_mode() ) ) {
+			$this->default_env_type = 'uilabs-development';
 		}
 
 		// check if DB needs to be upgraded (this will merge old settings to new)
@@ -80,7 +83,6 @@ class UI_Labs {
 			//run upgrade and store new version #
 			$this->upgrade( $current_db_version );
 		}
-
 	}
 
 	public function get_options() {
@@ -389,7 +391,13 @@ class UI_Labs {
 		<input type="checkbox" id="uilabs_options[identity]" name="uilabs_options[identity]" value="yes" <?php checked( $naked_options['identity'], 'yes', true ); ?> >
 		<label for="uilabs_options[identity]"><?php esc_html_e( 'Enable colour coding for your different servers for quick identification.', 'ui-labs' ); ?></label>
 
-		<p class="description"><?php echo wp_kses_post( __( 'As of Wordpress 5.5, the server type is configured by the WordPress environment settings. You can change this by defining <code>WP_ENVIRONMENT_TYPE</code> in your <code>wp-config.php</code> file. Supported environments and their colours are as follows:', 'ui-labs' ) ); ?></p>
+		<p class="description">
+			<?php echo wp_kses_post( __( 'The server type is configured by the WordPress environment settings. You can change this by defining <code>WP_ENVIRONMENT_TYPE</code> in your <code>wp-config.php</code> file.', 'ui-labs' ) ); ?>
+			<br /><?php echo wp_kses_post( __( 'If <code>WP_DEVELOPMENT_MODE</code> is defined, and <code>WP_ENVIRONMENT_TYPE</code> is not, your site will be flagged as "Development."', 'ui-labs' ) ); ?>
+		</p>
+		<p class="description">
+			<?php echo wp_kses_post( __( 'Supported environments and their colours are as follows:', 'ui-labs' ) ); ?>
+		</p>
 
 		<ul>
 			<?php
@@ -527,7 +535,7 @@ class UI_Labs {
 			}
 			echo '<tr class="plugin-age-tr' . esc_attr( $active_class ) . '" id="' . esc_attr( $plugin_data['slug'] . '-age' ) . '" data-slug="' . esc_attr( $plugin_data['slug'] ) . '" data-plugin="' . esc_attr( $file ) . '"><td colspan="' . esc_attr( $wp_list_table->get_column_count() ) . '" class="plugin-age colspanchange"><div class="age-message">';
 			// translators: %1 - Plugin Name ; %2 - time since last update
-			$results = sprintf( __( '%1$s was last updated %2$s ago and may no longer be supported.', '' ), $plugin_name, human_time_diff( $lastupdated, current_time( 'timestamp' ) ) );
+			$results = sprintf( __( '%1$s was last updated %2$s ago and may no longer be supported.', 'ui-labs' ), $plugin_name, human_time_diff( $lastupdated, current_time( 'timestamp' ) ) );
 			echo esc_html( $results );
 			echo '</div></td></tr>';
 		}
@@ -581,12 +589,12 @@ class UI_Labs {
 	/**
 	 * Identify Server UI Experiment
 	 *
-	 * Allows users to easily spot whether they are logged in to their developemnt, staging, or live server.
+	 * Allows users to easily spot whether they are logged in to their development, staging, or live server.
 	 *
 	 * @since 1.2
 	 */
 	public function admin_body_class( $classes ) {
-		if ( is_admin() && current_user_can( 'administrator' ) ) {
+		if ( is_admin() && current_user_can( 'manage_plugins' ) ) {
 			$classes .= ' ' . $this->default_env_type . ' ';
 		}
 		return $classes;
@@ -617,7 +625,6 @@ class UI_Labs {
 		}
 		return $links;
 	}
-
 }
 
 new UI_Labs();

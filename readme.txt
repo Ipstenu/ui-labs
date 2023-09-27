@@ -3,7 +3,7 @@ Contributors: JohnONolan, Ipstenu
 Tags: ui, admin design, experimental
 Requires at least: 5.5
 Tested up to: 6.4
-Stable tag: 4.0.2
+Stable tag: 4.0.3
 License: GPLv2 or later
 Donate link: https://ko-fi.com/A236CEN/
 
@@ -88,6 +88,9 @@ This happens if you have plugins hosted off of WordPress.org that do funny thing
 Because Multisite is a special creature.
 
 == Changelog ==
+
+= 4.0.3 (2023-09) =
+* Fix stupid typo.
 
 = 4.0.2 (2023-09) =
 * PHP 8.2 support

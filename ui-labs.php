@@ -4,7 +4,7 @@ Plugin Name: UI Labs
 Plugin URI: http://halfelf.org/plugins/ui-labs/
 Description: Experimental WordPress admin UI features, ooo shiny!
 Author: John O'Nolan, Mika A Epstein
-Version: 4.0.2
+Version: 4.0.3
 Author URI: http://halfelf.org
 License: GPL-2.0+
 License URI: http://www.opensource.org/licenses/gpl-license.php
@@ -27,10 +27,9 @@ class UI_Labs {
 
 
 	// Plugin version
-	public $plugin_version = '4.0.2';
+	public $plugin_version = '4.0.3';
 
-	// DB version, for schema upgrades.
-	public $db_version = 4;
+	// Default environment.
 	public $default_env_type;
 
 	// Instance
@@ -64,24 +63,6 @@ class UI_Labs {
 			$this->default_env_type = 'uilabs-' . wp_get_environment_type();
 		} elseif ( function_exists( 'wp_get_development_mode' ) && ! empty( wp_get_development_mode() ) ) {
 			$this->default_env_type = 'uilabs-development';
-		}
-
-		// check if DB needs to be upgraded (this will merge old settings to new)
-		$naked_options  = $this->get_options();
-		$single_options = 'empty';
-		if ( is_multisite() ) {
-			$single_options = get_blog_option( BLOG_ID_CURRENT_SITE, 'uilabs_options' );
-		}
-
-		if ( 'empty' !== $single_options && isset( $single_options['db_version'] ) && $single_options['db_version'] < $this->db_version ) {
-			$current_db_version = $single_options['db_version'];
-		} elseif ( isset( $naked_options['db_version'] ) || $naked_options['db_version'] < $this->db_version ) {
-			$current_db_version = isset( $naked_options['db_version'] ) ? $naked_options['db_version'] : 0;
-		}
-
-		if ( isset( $current_db_version ) ) {
-			//run upgrade and store new version #
-			$this->upgrade( $current_db_version );
 		}
 	}
 
@@ -125,92 +106,43 @@ class UI_Labs {
 		// Post Statuses
 		if ( 'yes' === $naked_options['poststatuses'] ) {
 			add_filter( 'display_post_states', array( &$this, 'display_post_states' ) );
-			wp_register_style( 'ui-labs-poststatuses', plugins_url( 'css/poststatuses.css', __FILE__ ), false, '$this->plugin_version' );
+			wp_register_style( 'ui-labs-poststatuses', plugins_url( 'css/poststatuses.css', __FILE__ ), false, $this->plugin_version );
 			wp_enqueue_style( 'ui-labs-poststatuses' );
 		}
 
 		// Show Plugin Age
 		if ( ( 'yes' === $naked_options['pluginage'] || 'all' === $naked_options['pluginage'] ) || ( 'no' !== $naked_options['pluginage'] && is_network_admin() ) ) {
-			wp_register_style( 'ui-labs-pluginage', plugins_url( 'css/pluginage.css', __FILE__ ), false, '$this->plugin_version' );
+			wp_register_style( 'ui-labs-pluginage', plugins_url( 'css/pluginage.css', __FILE__ ), false, $this->plugin_version );
 			wp_enqueue_style( 'ui-labs-pluginage' );
 			add_action( 'after_plugin_row', array( &$this, 'pluginage_row' ), 10, 2 );
 		}
 
 		// Change toolbar padding
 		if ( 'yes' === $naked_options['toolbar'] ) {
-			wp_register_style( 'ui-labs-toolbar', plugins_url( 'css/toolbar.css', __FILE__ ), false, '$this->plugin_version' );
+			wp_register_style( 'ui-labs-toolbar', plugins_url( 'css/toolbar.css', __FILE__ ), false, $this->plugin_version );
 			wp_enqueue_style( 'ui-labs-toolbar' );
 		}
 
 		// Change footer
 		if ( 'yes' === $naked_options['footer'] ) {
-			wp_register_style( 'ui-labs-footer', plugins_url( 'css/footer.css', __FILE__ ), false, '$this->plugin_version' );
+			wp_register_style( 'ui-labs-footer', plugins_url( 'css/footer.css', __FILE__ ), false, $this->plugin_version );
 			wp_enqueue_style( 'ui-labs-footer' );
 		}
 
 		// Make dashboard bigger fonts
 		if ( 'yes' === $naked_options['dashboard'] ) {
-			wp_register_style( 'ui-labs-dashboard', plugins_url( 'css/dashboard.css', __FILE__ ), false, '$this->plugin_version' );
+			wp_register_style( 'ui-labs-dashboard', plugins_url( 'css/dashboard.css', __FILE__ ), false, $this->plugin_version );
 			wp_enqueue_style( 'ui-labs-dashboard' );
 		}
 
 		// Identify server
 		if ( 'yes' === $naked_options['identity'] ) {
-			wp_register_style( 'ui-labs-identity', plugins_url( 'css/identity.css', __FILE__ ), false, '$this->plugin_version' );
+			wp_register_style( 'ui-labs-identity', plugins_url( 'css/identity.css', __FILE__ ), false, $this->plugin_version );
 			wp_enqueue_style( 'ui-labs-identity' );
 		}
 
 		// Filter for the admin body class
 		add_filter( 'admin_body_class', array( &$this, 'admin_body_class' ) );
-	}
-
-	/**
-	 * Upgrades Database
-	 *
-	 * @param int $current_db_version the current DB version
-	 * @since 2.0
-	 */
-	public function upgrade( $current_db_version ) {
-		// Get Options
-		$naked_options = $this->get_options();
-
-		if ( $current_db_version < 1 ) {
-			// Migrate old options to new
-			$naked_options['poststatuses'] = get_option( 'poststatuses' );
-			$naked_options['toolbar']      = get_option( 'adminbar' );
-			$naked_options['identity']     = get_option( 'identity' );
-			$naked_options['servertype']   = get_option( 'servertype' );
-			$naked_options['db_version']   = '1';
-
-			// Delete old options
-			delete_option( 'poststatuses' );
-			delete_option( 'adminbar' );
-			delete_option( 'identity' );
-			delete_option( 'servertype' );
-		} elseif ( $current_db_version < 3 ) {
-			// Move toolbar to footer
-			if ( is_multisite() ) {
-				$mainoptions = get_blog_option( BLOG_ID_CURRENT_SITE, 'uilabs_options' );
-				$mainoptions['db_version'] = '3';
-				update_blog_option( BLOG_ID_CURRENT_SITE, 'uilabs_options', $mainoptions );
-				$naked_options = $mainoptions;
-			}
-			$naked_options['footer'] = $naked_options['toolbar'];
-			$naked_options['db_version'] = '3';
-		} elseif ( $current_db_version < 4 ) {
-			// remove server type.
-			if ( is_multisite() ) {
-				$mainoptions = get_blog_option( BLOG_ID_CURRENT_SITE, 'uilabs_options' );
-				$mainoptions['db_version'] = '4';
-				unset( $mainoptions['servertype'] );
-				update_blog_option( BLOG_ID_CURRENT_SITE, 'uilabs_options', $mainoptions );
-				$naked_options = $mainoptions;
-			}
-			unset( $naked_options['servertype'] );
-			$naked_options['db_version'] = '4';
-		}
-
-		update_site_option( 'uilabs_options', $naked_options );
 	}
 
 	/**
@@ -594,7 +526,7 @@ class UI_Labs {
 	 * @since 1.2
 	 */
 	public function admin_body_class( $classes ) {
-		if ( is_admin() && current_user_can( 'manage_plugins' ) ) {
+		if ( is_admin() && current_user_can( 'activate_plugins' ) ) {
 			$classes .= ' ' . $this->default_env_type . ' ';
 		}
 		return $classes;

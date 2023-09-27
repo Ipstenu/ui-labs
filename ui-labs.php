@@ -185,8 +185,6 @@ class UI_Labs {
 					}
 				}
 
-				$output['db_version'] = $this->db_version;
-
 				// Update:
 				update_site_option( 'uilabs_options', $output );
 
@@ -390,8 +388,7 @@ class UI_Labs {
 	 */
 	public function uilabs_sanitize( $input ) {
 
-		$options             = $this->get_options();
-		$input['db_version'] = $this->db_version;
+		$options = $this->get_options();
 
 		foreach ( $options as $key => $value ) {
 			if ( ! isset( $input[ $key ] ) || is_null( $input[ $key ] ) || '0' === $input[ $key ] ) {
